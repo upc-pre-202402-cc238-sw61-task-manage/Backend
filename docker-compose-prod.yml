@@ -1,6 +1,6 @@
 services:
-  learning-center-platform-os:
-    image: learning-center-platform-os:0.0.1
+  task-manager-backend:
+    image: task-manager-prod:latest
     build:
       context: .
       dockerfile: Dockerfile
