@@ -1,7 +1,6 @@
 package com.taskmanager.backend.tasks.application.services;
 
 import com.taskmanager.backend.tasks.domain.model.aggregates.Task;
-import com.taskmanager.backend.tasks.domain.model.commands.CreateTaskCommand;
 import com.taskmanager.backend.tasks.domain.model.queries.GetAllTasksQuery;
 import com.taskmanager.backend.tasks.domain.model.queries.GetTaskByIdQuery;
 import com.taskmanager.backend.tasks.domain.model.queries.GetTaskByNameQuery;
@@ -15,7 +14,7 @@ import java.util.Optional;
 @Service
 public class TaskQueryServiceImpl implements TaskQueryService {
 
-    private TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
     public TaskQueryServiceImpl(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
