@@ -2,7 +2,11 @@ package com.taskmanager.backend.calendarManagement.interfaces;
 
 
 import com.taskmanager.backend.calendarManagement.domain.model.commands.DeleteEventCommand;
+import com.taskmanager.backend.calendarManagement.domain.model.queries.GetAllEventsByProjectIdQuery;
+import com.taskmanager.backend.calendarManagement.domain.model.queries.GetAllEventsByUserIdQuery;
 import com.taskmanager.backend.calendarManagement.domain.model.queries.GetEventByIdQuery;
+import com.taskmanager.backend.calendarManagement.domain.model.valueobjects.Project;
+import com.taskmanager.backend.calendarManagement.domain.model.valueobjects.User;
 import com.taskmanager.backend.calendarManagement.domain.services.EventCommandService;
 import com.taskmanager.backend.calendarManagement.domain.services.EventQueryService;
 import com.taskmanager.backend.calendarManagement.interfaces.resources.CreateEventResource;
@@ -17,6 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.MediaType;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/events", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -74,6 +80,23 @@ public class EventController {
         var deleteEventCommand = new DeleteEventCommand(eventId);
         eventCommandService.handle(deleteEventCommand);
         return ResponseEntity.ok("Event deleted successfully");
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<EventResource>> getAllEventsByUserId(@PathVariable Long userId){
+        var user = new User(userId);
+        var getAllEventsByUserIdQuery = new GetAllEventsByUserIdQuery(user);
+        var events = eventQueryService.handle(getAllEventsByUserIdQuery);
+        var eventResources = events.stream().map(EventResourceFromEntityAssembler::toResourceFromEntity).toList();
+        return ResponseEntity.ok(eventResources);
+    }
+    @GetMapping("/project/{projectId}")
+    public ResponseEntity<List<EventResource>> getAllEventsByProjectId(@PathVariable Long projectId){
+        var project = new Project(projectId);
+        var getAllEventsByProjectIdQuery = new GetAllEventsByProjectIdQuery(project);
+        var events = eventQueryService.handle(getAllEventsByProjectIdQuery);
+        var eventResources = events.stream().map(EventResourceFromEntityAssembler::toResourceFromEntity).toList();
+        return ResponseEntity.ok(eventResources);
     }
 
 }

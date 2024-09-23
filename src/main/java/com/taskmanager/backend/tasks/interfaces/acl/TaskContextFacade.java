@@ -37,7 +37,7 @@ public class TaskContextFacade {
      * @param assignUser The id of the user the that the task belongs to
      * @return The id of the Task
      */
-    public Long createTask(String taskName, String description, Date dueDate, String projectUUID, int assignUser){
+    public Long createTask(String taskName, String description, Date dueDate, Long projectUUID, int assignUser){
         var createTaskCommand = new CreateTaskCommand(taskName, description, dueDate, projectUUID, assignUser);
         var result = taskCommandService.handle(createTaskCommand);
         if (result.isEmpty()) return 0L;

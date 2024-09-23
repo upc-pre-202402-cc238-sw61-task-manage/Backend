@@ -1,6 +1,7 @@
 package com.taskmanager.backend.tasks.application.services;
 
 import com.taskmanager.backend.tasks.domain.model.aggregates.Task;
+import com.taskmanager.backend.tasks.domain.model.queries.GetAllTasksByUserIdQuery;
 import com.taskmanager.backend.tasks.domain.model.queries.GetAllTasksQuery;
 import com.taskmanager.backend.tasks.domain.model.queries.GetTaskByIdQuery;
 import com.taskmanager.backend.tasks.domain.model.queries.GetTaskByNameQuery;
@@ -32,5 +33,10 @@ public class TaskQueryServiceImpl implements TaskQueryService {
     @Override
     public List<Task> handle(GetAllTasksQuery query) {
         return this.taskRepository.findAll();
+    }
+
+    @Override
+    public List<Task> handle(GetAllTasksByUserIdQuery query) {
+        return taskRepository.findAllByAssignUser(query.UserId());
     }
 }

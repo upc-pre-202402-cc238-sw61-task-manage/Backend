@@ -6,7 +6,7 @@ public record CreateTaskResource(
         String taskName,
         String taskDescription,
         Date dueDate,
-        String projectUUID,
+        Long projectUUID,
         int assignUser
 ) {
 }

@@ -8,7 +8,7 @@ public record CreateTaskCommand(
         @NotBlank String taskName,
         @NotBlank String taskDescription,
         @NotBlank Date dueDate,
-        @NotBlank String projectUUID,
+        @NotBlank Long projectUUID,
         @NotBlank int assignUser
 ) {
 }

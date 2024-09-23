@@ -1,6 +1,7 @@
 package com.taskmanager.backend.tasks.domain.services;
 
 import com.taskmanager.backend.tasks.domain.model.aggregates.Task;
+import com.taskmanager.backend.tasks.domain.model.queries.GetAllTasksByUserIdQuery;
 import com.taskmanager.backend.tasks.domain.model.queries.GetAllTasksQuery;
 import com.taskmanager.backend.tasks.domain.model.queries.GetTaskByIdQuery;
 import com.taskmanager.backend.tasks.domain.model.queries.GetTaskByNameQuery;
@@ -14,4 +15,6 @@ public interface TaskQueryService {
     Optional<Task> handle (GetTaskByIdQuery query);
     Optional<Task> handle (GetTaskByNameQuery query);
     List<Task> handle (GetAllTasksQuery query);
+
+    List<Task> handle (GetAllTasksByUserIdQuery query);
 }

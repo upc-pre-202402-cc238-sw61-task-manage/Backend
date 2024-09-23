@@ -7,7 +7,7 @@ public record TaskResource(
         String taskName,
         String taskDescription,
         Date dueDate,
-        String projectUUID,
+        Long projectUUID,
         int assignUser
 ) {
 }

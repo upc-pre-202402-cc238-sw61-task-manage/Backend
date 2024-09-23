@@ -34,7 +34,7 @@ public class Task extends AuditableAbstractAggregateRoot<Task> {
     private Date dueDate;
 
     @AttributeOverride(name = "value", column = @Column(name = "project_uuid"))
-    private String projectUUID;
+    private Long projectUUID;
 
     @AttributeOverride(name = "value", column = @Column(name = "asign_user"))
     private int assignUser;

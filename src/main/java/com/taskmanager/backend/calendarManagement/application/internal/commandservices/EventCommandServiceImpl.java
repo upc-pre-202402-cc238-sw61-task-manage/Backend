@@ -62,7 +62,7 @@ public class EventCommandServiceImpl implements EventCommandService {
             throw new IllegalArgumentException("Event does not exist");
         }
         try{
-            eventRepository.existsById(command.eventId());
+            eventRepository.deleteById(command.eventId());
         }catch (Exception e){
             throw new IllegalArgumentException("Error while deleting event" + e.getMessage());
         }
