@@ -1,6 +1,7 @@
 package com.taskmanager.backend.project.domain.model.aggregates;
 
 import com.taskmanager.backend.project.domain.model.commands.CreateProjectCommand;
+import com.taskmanager.backend.project.domain.model.commands.UpdateProjectCommand;
 import com.taskmanager.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -27,5 +28,13 @@ public class Project extends AuditableAbstractAggregateRoot<Project> {
     public Project(CreateProjectCommand command){
         this.projectName = command.projectName();
         this.projectDescription = command.projectDescription();
+        this.projectManager = command.projectManager();
+        this.projectMember = command.projectMember();
+    }
+    public Project updateProject(UpdateProjectCommand command) {
+        this.projectName = command.getProjectName();
+        this.projectDescription = command.getProjectDescription();
+        this.projectManager = command.getProjectManager();
+        return this;
     }
 }
