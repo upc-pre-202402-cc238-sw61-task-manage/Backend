@@ -6,10 +6,12 @@ import com.taskmanager.backend.project.domain.model.queries.GetProjectByIdQuery;
 import com.taskmanager.backend.project.domain.model.queries.GetProjectByNameQuery;
 import com.taskmanager.backend.project.domain.services.ProjectQueryService;
 import com.taskmanager.backend.project.infrastructure.persistence.jpa.repositories.ProjectRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class ProjectQueryServiceImplementation implements ProjectQueryService {
     private final ProjectRepository projectRepository;
     public ProjectQueryServiceImplementation(ProjectRepository projectRepository) {
