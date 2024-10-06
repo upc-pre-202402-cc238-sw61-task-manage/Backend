@@ -1,11 +1,11 @@
 package com.taskmanager.backend.tasks.interfaces.rest.resources;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public record UpdateTaskResource(
         String taskName,
         String taskDescription,
-        Date dueDate,
-        int assignUser
+        LocalDate dueDate,
+        Long assignUser
 ) {
 }

@@ -10,7 +10,7 @@ public class TaskResourceFromEntityAssembler {
                 entity.getTaskName(),
                 entity.getTaskDescription(),
                 entity.getDueDate(),
-                entity.getProjectUUID(),
+                entity.getProjectId(),
                 entity.getAssignUser()
         );
     }

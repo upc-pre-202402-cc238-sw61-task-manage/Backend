@@ -9,7 +9,7 @@ public class CreateTaskCommandFromResourceAssembler {
                 resource.taskName(),
                 resource.taskDescription(),
                 resource.dueDate(),
-                resource.projectUUID(),
+                resource.projectId(),
                 resource.assignUser()
         );
     }

@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -21,9 +21,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Table(name = "tasks")
 public class Task extends AuditableAbstractAggregateRoot<Task> {
-    @AttributeOverride(name = "value", column = @Column(name = "id"))
-    private Long id;
-
     @AttributeOverride(name = "value", column = @Column(name = "task_name"))
     private String taskName;
 
@@ -31,19 +28,19 @@ public class Task extends AuditableAbstractAggregateRoot<Task> {
     private String taskDescription;
 
     @AttributeOverride(name = "value", column = @Column(name = "due_date"))
-    private Date dueDate;
+    private LocalDate dueDate;
 
     @AttributeOverride(name = "value", column = @Column(name = "project_uuid"))
-    private String projectUUID;
+    private Long projectId;
 
     @AttributeOverride(name = "value", column = @Column(name = "asign_user"))
-    private int assignUser;
+    private Long assignUser;
 
     public Task(CreateTaskCommand command){
         this.taskName = command.taskName();
         this.taskDescription = command.taskDescription();
         this.dueDate = command.dueDate();
-        this.projectUUID = command.projectUUID();
+        this.projectId = command.projectUUID();
         this.assignUser = command.assignUser();
     }
 

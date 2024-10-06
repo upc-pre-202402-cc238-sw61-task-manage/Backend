@@ -2,13 +2,13 @@ package com.taskmanager.backend.tasks.domain.model.commands;
 
 import jakarta.validation.constraints.NotBlank;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public record CreateTaskCommand(
         @NotBlank String taskName,
         @NotBlank String taskDescription,
-        @NotBlank Date dueDate,
-        @NotBlank String projectUUID,
-        @NotBlank int assignUser
+        @NotBlank LocalDate dueDate,
+        @NotBlank Long projectUUID,
+        @NotBlank Long assignUser
 ) {
 }
