@@ -9,6 +9,7 @@ import com.taskmanager.backend.tasks.domain.services.TaskCommandService;
 import com.taskmanager.backend.tasks.domain.services.TaskQueryService;
 import io.jsonwebtoken.lang.Strings;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -35,9 +36,9 @@ public class TaskContextFacade {
      * @param dueDate The day which the Task needs to be presented
      * @param projectUUID The id of the project the that the task belongs to
      * @param assignUser The id of the user the that the task belongs to
-     * @return The id of the Task
+     * @return The id of the Task if it is created successfully
      */
-    public Long createTask(String taskName, String description, Date dueDate, String projectUUID, int assignUser){
+    public Long createTask(String taskName, String description, LocalDate dueDate, Long projectUUID, Long assignUser){
         var createTaskCommand = new CreateTaskCommand(taskName, description, dueDate, projectUUID, assignUser);
         var result = taskCommandService.handle(createTaskCommand);
         if (result.isEmpty()) return 0L;
@@ -47,7 +48,7 @@ public class TaskContextFacade {
     /**
      * Fetches the id of the Task with the given id
      * @param taskId The name of the task
-     * @return the id of the task
+     * @return the id of the task if it is found
      */
     public Long fetchTaskById(Long taskId){
         var getTaskById = new GetTaskByIdQuery(taskId);
@@ -59,7 +60,7 @@ public class TaskContextFacade {
     /**
      * Fetches the id of the Task with the given task name
      * @param taskName The name of the task
-     * @return the id of the task
+     * @return the name of the task if it is found
      */
     public String fetchTaskByTaskName(String taskName){
         var getTaskByTaskName = new GetTaskByNameQuery(taskName);
@@ -75,9 +76,9 @@ public class TaskContextFacade {
      * @param description The complete description of the Task.
      * @param dueDate The day which the Task needs to be presented
      * @param assignUser The id of the user the that the task belongs to
-     * @return The id of the Task
+     * @return The id of the Task if the Task is updated successfully
      */
-    public Long updateTask(Long id, String taskName, String description, Date dueDate, int assignUser){
+    public Long updateTask(Long id, String taskName, String description, LocalDate dueDate, Long assignUser){
         var updateTaskCommand = new UpdateTaskCommand(id, taskName, description, dueDate, assignUser);
         var result = taskCommandService.handle(updateTaskCommand);
         if (result.isEmpty()) return 0L;
@@ -86,8 +87,8 @@ public class TaskContextFacade {
 
     /**
      * Deletes the task of the given id
-     * @param taskId
-     * @return
+     * @param taskId The id of the task
+     * @return true if the task is deleted successfully
      */
     public boolean deleteTask(Long taskId){
         var deleteTaskCommand = new DeleteTaskCommand(taskId);
