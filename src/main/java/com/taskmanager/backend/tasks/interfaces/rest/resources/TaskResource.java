@@ -1,5 +1,7 @@
 package com.taskmanager.backend.tasks.interfaces.rest.resources;
 
+import com.taskmanager.backend.tasks.domain.model.valueObjects.TaskStatus;
+
 import java.time.LocalDate;
 
 public record TaskResource(
@@ -8,6 +10,7 @@ public record TaskResource(
         String taskDescription,
         LocalDate dueDate,
         Long projectId,
-        Long assignUser
+        Long assignUser,
+        TaskStatus status
 ) {
 }

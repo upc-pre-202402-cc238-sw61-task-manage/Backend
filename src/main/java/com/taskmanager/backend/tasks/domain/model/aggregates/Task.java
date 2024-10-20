@@ -3,10 +3,8 @@ package com.taskmanager.backend.tasks.domain.model.aggregates;
 import com.taskmanager.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import com.taskmanager.backend.tasks.domain.model.commands.CreateTaskCommand;
 import com.taskmanager.backend.tasks.domain.model.commands.UpdateTaskCommand;
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.taskmanager.backend.tasks.domain.model.valueObjects.TaskStatus;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,12 +34,17 @@ public class Task extends AuditableAbstractAggregateRoot<Task> {
     @AttributeOverride(name = "value", column = @Column(name = "asign_user"))
     private Long assignUser;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "task_status")
+    private TaskStatus status;
+
     public Task(CreateTaskCommand command){
         this.taskName = command.taskName();
         this.taskDescription = command.taskDescription();
         this.dueDate = command.dueDate();
         this.projectId = command.projectUUID();
         this.assignUser = command.assignUser();
+        this.status = TaskStatus.NEW;
     }
 
     public Task updateTask(UpdateTaskCommand command){
@@ -49,6 +52,7 @@ public class Task extends AuditableAbstractAggregateRoot<Task> {
         this.taskDescription = command.taskDescription();
         this.dueDate = command.dueDate();
         this.assignUser = command.assignUser();
+        this.status = command.status();
         return this;
     }
 }

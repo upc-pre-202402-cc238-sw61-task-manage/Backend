@@ -1,6 +1,7 @@
 package com.taskmanager.backend.tasks.interfaces.rest.controller;
 
 import com.taskmanager.backend.tasks.domain.model.commands.DeleteTaskCommand;
+import com.taskmanager.backend.tasks.domain.model.queries.GetAllTasksByProjectIdQuery;
 import com.taskmanager.backend.tasks.domain.model.queries.GetAllTasksQuery;
 import com.taskmanager.backend.tasks.domain.model.queries.GetTaskByIdQuery;
 import com.taskmanager.backend.tasks.domain.services.TaskCommandService;
@@ -33,16 +34,41 @@ public class TaskController {
     public ResponseEntity<TaskResource> getTaskById(@PathVariable Long taskId) {
         var getTaskByIdQuery = new GetTaskByIdQuery(taskId);
         var task = taskQueryService.handle(getTaskByIdQuery);
-        if (task.isEmpty()) return ResponseEntity.notFound().build();
+        return task.map(value -> ResponseEntity
+                .ok(TaskResourceFromEntityAssembler.transformResourceFromEntity(value)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
 
-        return ResponseEntity.ok(TaskResourceFromEntityAssembler.transformResourceFromEntity(task.get()));
     }
 
     @GetMapping
     public ResponseEntity<List<TaskResource>> getAllTasks(){
         var getAllTasksQuery = new GetAllTasksQuery();
         var tasks = taskQueryService.handle(getAllTasksQuery);
-        var tasksResource = tasks.stream().map(TaskResourceFromEntityAssembler::transformResourceFromEntity).toList();
+        var tasksResource = tasks.stream()
+                .map(TaskResourceFromEntityAssembler::transformResourceFromEntity)
+                .toList();
+        return ResponseEntity.ok(tasksResource);
+    }
+
+    @GetMapping("/project/{projectId}")
+    public ResponseEntity<List<TaskResource>> getAllTasksByProjectId(@PathVariable Long projectId) {
+        var getAllTasksByProjectIdQuery = new GetAllTasksByProjectIdQuery(projectId, null);
+        var tasks = taskQueryService.handle(getAllTasksByProjectIdQuery);
+        var tasksResource = tasks.stream()
+                .map(TaskResourceFromEntityAssembler::transformResourceFromEntity)
+                .toList();
+        return ResponseEntity.ok(tasksResource);
+    }
+
+    @GetMapping("/project/{projectId}/user/{userId}")
+    public ResponseEntity<List<TaskResource>> getAllTasksByProjectIdAndUserId(
+            @PathVariable Long projectId,
+            @PathVariable Long userId) {
+        var getAllTasksByProjectIdQuery = new GetAllTasksByProjectIdQuery(projectId, userId);
+        var tasks = taskQueryService.handle(getAllTasksByProjectIdQuery);
+        var tasksResource = tasks.stream()
+                .map(TaskResourceFromEntityAssembler::transformResourceFromEntity)
+                .toList();
         return ResponseEntity.ok(tasksResource);
     }
 

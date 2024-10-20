@@ -5,6 +5,7 @@ import com.taskmanager.backend.tasks.domain.model.commands.DeleteTaskCommand;
 import com.taskmanager.backend.tasks.domain.model.commands.UpdateTaskCommand;
 import com.taskmanager.backend.tasks.domain.model.queries.GetTaskByIdQuery;
 import com.taskmanager.backend.tasks.domain.model.queries.GetTaskByNameQuery;
+import com.taskmanager.backend.tasks.domain.model.valueObjects.TaskStatus;
 import com.taskmanager.backend.tasks.domain.services.TaskCommandService;
 import com.taskmanager.backend.tasks.domain.services.TaskQueryService;
 import io.jsonwebtoken.lang.Strings;
@@ -78,8 +79,8 @@ public class TaskContextFacade {
      * @param assignUser The id of the user the that the task belongs to
      * @return The id of the Task if the Task is updated successfully
      */
-    public Long updateTask(Long id, String taskName, String description, LocalDate dueDate, Long assignUser){
-        var updateTaskCommand = new UpdateTaskCommand(id, taskName, description, dueDate, assignUser);
+    public Long updateTask(Long id, String taskName, String description, LocalDate dueDate, Long assignUser, TaskStatus status){
+        var updateTaskCommand = new UpdateTaskCommand(id, taskName, description, dueDate, assignUser, status);
         var result = taskCommandService.handle(updateTaskCommand);
         if (result.isEmpty()) return 0L;
         return result.get().getId();
