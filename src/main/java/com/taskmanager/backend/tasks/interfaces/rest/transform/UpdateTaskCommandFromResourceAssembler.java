@@ -10,7 +10,8 @@ public class UpdateTaskCommandFromResourceAssembler {
                 resource.taskName(),
                 resource.taskDescription(),
                 resource.dueDate(),
-                resource.assignUser()
+                resource.assignUser(),
+                resource.status()
         );
     }
 }
