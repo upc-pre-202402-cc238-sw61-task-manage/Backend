@@ -37,10 +37,14 @@ public class TaskQueryServiceImpl implements TaskQueryService {
 
     @Override
     public List<Task> handle(GetAllTasksByProjectIdQuery query) {
-        if (query.userId() == null) {
-            return taskRepository.findByProjectId(query.projectId());
-        } else {
+        if (query.userId() != null && query.status() != null) {
+            return taskRepository.findByProjectIdAndAssignUserAndStatus(query.projectId(), query.userId(), query.status());
+        } else if (query.userId() != null) {
             return taskRepository.findByProjectIdAndAssignUser(query.projectId(), query.userId());
+        } else if (query.status() != null) {
+            return taskRepository.findByProjectIdAndStatus(query.projectId(), query.status());
+        } else {
+            return taskRepository.findByProjectId(query.projectId());
         }
     }
 }
