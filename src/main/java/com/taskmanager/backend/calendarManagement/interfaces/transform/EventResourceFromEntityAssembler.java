@@ -6,6 +6,6 @@ import com.taskmanager.backend.calendarManagement.interfaces.resources.EventReso
 public class EventResourceFromEntityAssembler {
 
     public static EventResource toResourceFromEntity(Event entity){
-        return new EventResource(entity.getId(), entity.getProjectId(), entity.getUserId(), entity.getTitle(), entity.getDescription(), entity.getDay(), entity.getMonth(), entity.getYear());
+        return new EventResource(entity.getId(), entity.getProjectId(), entity.getUserId(), entity.getTitle(), entity.getDescription(), entity.getDueDate());
     }
 }

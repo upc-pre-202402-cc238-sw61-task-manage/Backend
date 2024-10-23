@@ -47,7 +47,7 @@ public class EventCommandServiceImpl implements EventCommandService {
         }
         var eventToUpdate = result.get();
         try{
-            var updatedEvent = eventRepository.save(eventToUpdate.updateInformation(command.title(), command.description(), command.day(), command.month(), command.year()));
+            var updatedEvent = eventRepository.save(eventToUpdate.updateInformation(command.title(), command.description(), command.dueDate()));
             return Optional.of(updatedEvent);
         } catch (Exception e){
             throw new IllegalArgumentException("Error while updating event" + e.getMessage());

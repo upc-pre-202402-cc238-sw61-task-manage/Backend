@@ -6,7 +6,7 @@ import com.taskmanager.backend.calendarManagement.interfaces.resources.CreateEve
 public class CreateEventCommandFromResourceAssembler {
 
     public static CreateEventCommand toCommandFromResource(CreateEventResource resource) {
-        return new CreateEventCommand(resource.userId(), resource.projectId(), resource.title(), resource.description(), resource.day(), resource.month(), resource.year());
+        return new CreateEventCommand(resource.userId(), resource.projectId(), resource.title(), resource.description(), resource.dueDate());
     }
 
 }

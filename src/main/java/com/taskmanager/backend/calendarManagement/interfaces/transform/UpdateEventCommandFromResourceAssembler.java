@@ -6,6 +6,6 @@ import com.taskmanager.backend.calendarManagement.interfaces.resources.UpdateEve
 public class UpdateEventCommandFromResourceAssembler {
 
     public static UpdateEventCommand toCommandFromResource(Long eventId, UpdateEventResource resource) {
-        return new UpdateEventCommand(eventId, resource.title(), resource.description(), resource.day(), resource.month(), resource.year());
+        return new UpdateEventCommand(eventId, resource.title(), resource.description(), resource.dueDate());
     }
 }

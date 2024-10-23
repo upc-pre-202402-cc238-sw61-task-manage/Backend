@@ -10,6 +10,8 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 @Getter
 @Entity
 public class Event extends AuditableAbstractAggregateRoot<Event> {
@@ -27,22 +29,13 @@ public class Event extends AuditableAbstractAggregateRoot<Event> {
     private String description;
 
     @Column
-    private int day;
-
-    @Column
-    private int month;
-
-    @Column
-    private int year;
-
+    private LocalDate dueDate;
 
     public Event() {
         this.project = new Project(null);
         this.title = "";
         this.description = "";
-        this.day = 0;
-        this.month = 0;
-        this.year = 0;
+        this.dueDate = LocalDate.now();
     }
 
     public Event(CreateEventCommand command) {
@@ -50,17 +43,13 @@ public class Event extends AuditableAbstractAggregateRoot<Event> {
         this.project = new Project(command.project());
         this.title = command.title();
         this.description = command.description();
-        this.day = command.day();
-        this.month = command.month();
-        this.year = command.year();
+        this.dueDate = command.dueDate();
     }
 
-    public Event updateInformation(String title, String description, int day, int month, int year) {
+    public Event updateInformation(String title, String description, LocalDate dueDate) {
         this.title = title;
         this.description = description;
-        this.day = day;
-        this.month = month;
-        this.year = year;
+        this.dueDate = dueDate;
         return this;
     }
 
