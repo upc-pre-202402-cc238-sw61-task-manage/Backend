@@ -8,7 +8,7 @@ public record UpdateTaskResource(
         String taskName,
         String taskDescription,
         LocalDate dueDate,
-        Long assignUser,
+        Long userId,
         TaskStatus status
 ) {
 }

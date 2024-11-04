@@ -1,10 +1,7 @@
 package com.taskmanager.backend.tasks.domain.services;
 
 import com.taskmanager.backend.tasks.domain.model.aggregates.Task;
-import com.taskmanager.backend.tasks.domain.model.queries.GetAllTasksByProjectIdQuery;
-import com.taskmanager.backend.tasks.domain.model.queries.GetAllTasksQuery;
-import com.taskmanager.backend.tasks.domain.model.queries.GetTaskByIdQuery;
-import com.taskmanager.backend.tasks.domain.model.queries.GetTaskByNameQuery;
+import com.taskmanager.backend.tasks.domain.model.queries.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,4 +13,5 @@ public interface TaskQueryService {
     Optional<Task> handle (GetTaskByNameQuery query);
     List<Task> handle (GetAllTasksQuery query);
     List<Task> handle(GetAllTasksByProjectIdQuery query);
+    List<Task> handle(GetTasksByUserIdQuery query);
 }

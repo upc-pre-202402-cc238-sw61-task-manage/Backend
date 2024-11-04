@@ -10,7 +10,7 @@ public record TaskResource(
         String taskDescription,
         LocalDate dueDate,
         Long projectId,
-        Long assignUser,
+        Long userId,
         TaskStatus status
 ) {
 }
