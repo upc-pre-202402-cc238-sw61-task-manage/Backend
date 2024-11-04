@@ -4,6 +4,7 @@ import com.taskmanager.backend.tasks.domain.model.commands.DeleteTaskCommand;
 import com.taskmanager.backend.tasks.domain.model.queries.GetAllTasksByProjectIdQuery;
 import com.taskmanager.backend.tasks.domain.model.queries.GetAllTasksQuery;
 import com.taskmanager.backend.tasks.domain.model.queries.GetTaskByIdQuery;
+import com.taskmanager.backend.tasks.domain.model.queries.GetTasksByUserIdQuery;
 import com.taskmanager.backend.tasks.domain.model.valueObjects.TaskStatus;
 import com.taskmanager.backend.tasks.domain.services.TaskCommandService;
 import com.taskmanager.backend.tasks.domain.services.TaskQueryService;
@@ -40,6 +41,17 @@ public class TaskController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
 
     }
+
+    @GetMapping("user/{userId}")
+    public ResponseEntity<List<TaskResource>> getTasksByUserId(@PathVariable Long userId) {
+        var getTaskByUserIdQuery = new GetTasksByUserIdQuery(userId);
+        var tasks = taskQueryService.handle(getTaskByUserIdQuery);
+        var taskResource = tasks.stream()
+                .map(TaskResourceFromEntityAssembler::transformResourceFromEntity)
+                .toList();
+        return ResponseEntity.ok(taskResource);
+    }
+
 
     @GetMapping
     public ResponseEntity<List<TaskResource>> getAllTasks(){

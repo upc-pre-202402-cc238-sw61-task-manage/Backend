@@ -9,7 +9,7 @@ public record CreateTaskResource(
         String taskDescription,
         LocalDate dueDate,
         Long projectId,
-        Long assignUser,
+        Long userId,
         TaskStatus status
 ) {
 }
