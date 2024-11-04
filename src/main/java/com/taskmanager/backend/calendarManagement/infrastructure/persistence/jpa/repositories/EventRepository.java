@@ -5,6 +5,7 @@ import com.taskmanager.backend.calendarManagement.domain.model.valueobjects.Proj
 import com.taskmanager.backend.calendarManagement.domain.model.valueobjects.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
@@ -13,4 +14,5 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     boolean existsByTitleAndIdIsNot(String title, Long id);
     List<Event> findAllByProject(Project project);
     List<Event> findAllByUser(User user);
+    List<Event> findAllByDueDate(LocalDate dueDate);
 }

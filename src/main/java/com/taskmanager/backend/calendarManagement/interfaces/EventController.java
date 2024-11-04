@@ -2,6 +2,7 @@ package com.taskmanager.backend.calendarManagement.interfaces;
 
 
 import com.taskmanager.backend.calendarManagement.domain.model.commands.DeleteEventCommand;
+import com.taskmanager.backend.calendarManagement.domain.model.queries.GetAllEventsByDueDateQuery;
 import com.taskmanager.backend.calendarManagement.domain.model.queries.GetAllEventsByProjectIdQuery;
 import com.taskmanager.backend.calendarManagement.domain.model.queries.GetAllEventsByUserIdQuery;
 import com.taskmanager.backend.calendarManagement.domain.model.queries.GetEventByIdQuery;
@@ -21,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -97,5 +99,13 @@ public class EventController {
         var eventResources = events.stream().map(EventResourceFromEntityAssembler::toResourceFromEntity).toList();
         return ResponseEntity.ok(eventResources);
     }
+    @GetMapping("/{dueDate}")
+    public ResponseEntity<List<EventResource>> getAllEventsByDueDate(@PathVariable LocalDate dueDate){
+        var getAllEventsByDueDateQuery = new GetAllEventsByDueDateQuery(dueDate);
+        var events = eventQueryService.handle(getAllEventsByDueDateQuery);
+        var eventResources = events.stream().map(EventResourceFromEntityAssembler::toResourceFromEntity).toList();
+        return ResponseEntity.ok(eventResources);
+    }
+
 
 }
