@@ -10,7 +10,7 @@ public record UpdateTaskCommand(
         @NotBlank String taskName,
         @NotBlank String taskDescription,
         @NotBlank LocalDate dueDate,
-        @NotBlank Long assignUser,
+        @NotBlank Long userId,
         @NotBlank TaskStatus status
 ) {
 }

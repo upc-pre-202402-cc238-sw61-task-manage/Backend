@@ -35,12 +35,12 @@ public class TaskContextFacade {
      * @param taskName The name of the Task
      * @param description The complete description of the Task.
      * @param dueDate The day which the Task needs to be presented
-     * @param projectUUID The id of the project the that the task belongs to
-     * @param assignUser The id of the user the that the task belongs to
+     * @param projectId The id of the project the that the task belongs to
+     * @param userId The id of the user the that the task belongs to
      * @return The id of the Task if it is created successfully
      */
-    public Long createTask(String taskName, String description, LocalDate dueDate, Long projectUUID, Long assignUser){
-        var createTaskCommand = new CreateTaskCommand(taskName, description, dueDate, projectUUID, assignUser);
+    public Long createTask(String taskName, String description, LocalDate dueDate, Long projectId, Long userId){
+        var createTaskCommand = new CreateTaskCommand(taskName, description, dueDate, projectId, userId);
         var result = taskCommandService.handle(createTaskCommand);
         if (result.isEmpty()) return 0L;
         return result.get().getId();
@@ -76,11 +76,11 @@ public class TaskContextFacade {
      * @param taskName The name of the Task
      * @param description The complete description of the Task.
      * @param dueDate The day which the Task needs to be presented
-     * @param assignUser The id of the user the that the task belongs to
+     * @param userId The id of the user the that the task belongs to
      * @return The id of the Task if the Task is updated successfully
      */
-    public Long updateTask(Long id, String taskName, String description, LocalDate dueDate, Long assignUser, TaskStatus status){
-        var updateTaskCommand = new UpdateTaskCommand(id, taskName, description, dueDate, assignUser, status);
+    public Long updateTask(Long id, String taskName, String description, LocalDate dueDate, Long userId, TaskStatus status){
+        var updateTaskCommand = new UpdateTaskCommand(id, taskName, description, dueDate, userId, status);
         var result = taskCommandService.handle(updateTaskCommand);
         if (result.isEmpty()) return 0L;
         return result.get().getId();

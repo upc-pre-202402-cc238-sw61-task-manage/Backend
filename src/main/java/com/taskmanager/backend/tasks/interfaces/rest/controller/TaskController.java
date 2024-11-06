@@ -1,10 +1,7 @@
 package com.taskmanager.backend.tasks.interfaces.rest.controller;
 
 import com.taskmanager.backend.tasks.domain.model.commands.DeleteTaskCommand;
-import com.taskmanager.backend.tasks.domain.model.queries.GetAllTasksByProjectIdQuery;
-import com.taskmanager.backend.tasks.domain.model.queries.GetAllTasksQuery;
-import com.taskmanager.backend.tasks.domain.model.queries.GetTaskByIdQuery;
-import com.taskmanager.backend.tasks.domain.model.queries.GetTasksByUserIdQuery;
+import com.taskmanager.backend.tasks.domain.model.queries.*;
 import com.taskmanager.backend.tasks.domain.model.valueObjects.TaskStatus;
 import com.taskmanager.backend.tasks.domain.services.TaskCommandService;
 import com.taskmanager.backend.tasks.domain.services.TaskQueryService;
@@ -18,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -32,27 +30,6 @@ public class TaskController {
         this.taskCommandService = taskCommandService;
     }
 
-    @GetMapping("/{taskId}")
-    public ResponseEntity<TaskResource> getTaskById(@PathVariable Long taskId) {
-        var getTaskByIdQuery = new GetTaskByIdQuery(taskId);
-        var task = taskQueryService.handle(getTaskByIdQuery);
-        return task.map(value -> ResponseEntity
-                .ok(TaskResourceFromEntityAssembler.transformResourceFromEntity(value)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
-
-    }
-
-    @GetMapping("user/{userId}")
-    public ResponseEntity<List<TaskResource>> getTasksByUserId(@PathVariable Long userId) {
-        var getTaskByUserIdQuery = new GetTasksByUserIdQuery(userId);
-        var tasks = taskQueryService.handle(getTaskByUserIdQuery);
-        var taskResource = tasks.stream()
-                .map(TaskResourceFromEntityAssembler::transformResourceFromEntity)
-                .toList();
-        return ResponseEntity.ok(taskResource);
-    }
-
-
     @GetMapping
     public ResponseEntity<List<TaskResource>> getAllTasks(){
         var getAllTasksQuery = new GetAllTasksQuery();
@@ -61,6 +38,26 @@ public class TaskController {
                 .map(TaskResourceFromEntityAssembler::transformResourceFromEntity)
                 .toList();
         return ResponseEntity.ok(tasksResource);
+    }
+
+    @GetMapping("/task/{taskId}")
+    public ResponseEntity<TaskResource> getTaskById(@PathVariable Long taskId) {
+        var getTaskByIdQuery = new GetTaskByIdQuery(taskId);
+        var task = taskQueryService.handle(getTaskByIdQuery);
+        return task.map(value -> ResponseEntity
+                        .ok(TaskResourceFromEntityAssembler.transformResourceFromEntity(value)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<TaskResource>> getTasksByUserId(@PathVariable Long userId) {
+        var getTaskByUserIdQuery = new GetTasksByUserIdQuery(userId);
+        var tasks = taskQueryService.handle(getTaskByUserIdQuery);
+        var taskResource = tasks.stream()
+                .map(TaskResourceFromEntityAssembler::transformResourceFromEntity)
+                .toList();
+        return ResponseEntity.ok(taskResource);
     }
 
     @GetMapping("/project/{projectId}")
@@ -86,6 +83,16 @@ public class TaskController {
                 .map(TaskResourceFromEntityAssembler::transformResourceFromEntity)
                 .toList();
         return ResponseEntity.ok(tasksResource);
+    }
+
+    @GetMapping("/due_date/{dueDate}")
+    public ResponseEntity<List<TaskResource>> getTasksByDueDate(@PathVariable LocalDate dueDate) {
+        var getTaskByDueDateQuery = new GetTasksByDueDateQuery(dueDate);
+        var tasks = taskQueryService.handle(getTaskByDueDateQuery);
+        var taskResource = tasks.stream()
+                .map(TaskResourceFromEntityAssembler::transformResourceFromEntity)
+                .toList();
+        return ResponseEntity.ok(taskResource);
     }
 
     @PostMapping
