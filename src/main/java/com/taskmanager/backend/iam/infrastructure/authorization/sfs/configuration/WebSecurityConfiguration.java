@@ -90,7 +90,7 @@ public class WebSecurityConfiguration {
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors(configurer -> configurer.configurationSource(_ -> {
+        http.cors(corsConfigurer -> corsConfigurer.configurationSource(_ -> {
             var cors = new CorsConfiguration();
             cors.setAllowedOrigins(List.of("*"));
             cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
@@ -99,7 +99,7 @@ public class WebSecurityConfiguration {
         }));
         http.csrf(csrfConfigurer -> csrfConfigurer.disable())
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(unauthorizedRequestHandler))
-                .sessionManagement( customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(sessionConfigurer -> sessionConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(
                                 "/api/v1/authentication/**",
@@ -112,7 +112,6 @@ public class WebSecurityConfiguration {
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authorizationRequestFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
-
     }
 
     /**
