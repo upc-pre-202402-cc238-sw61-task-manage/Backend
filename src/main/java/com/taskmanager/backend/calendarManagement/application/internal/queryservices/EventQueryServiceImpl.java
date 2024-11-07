@@ -1,6 +1,7 @@
 package com.taskmanager.backend.calendarManagement.application.internal.queryservices;
 
 import com.taskmanager.backend.calendarManagement.domain.model.aggregates.Event;
+import com.taskmanager.backend.calendarManagement.domain.model.queries.GetAllEventsByDueDateQuery;
 import com.taskmanager.backend.calendarManagement.domain.model.queries.GetAllEventsByProjectIdQuery;
 import com.taskmanager.backend.calendarManagement.domain.model.queries.GetAllEventsByUserIdQuery;
 import com.taskmanager.backend.calendarManagement.domain.model.queries.GetEventByIdQuery;
@@ -33,5 +34,10 @@ public class EventQueryServiceImpl implements EventQueryService {
     @Override
     public List<Event> handle(GetAllEventsByUserIdQuery query) {
         return eventRepository.findAllByUser(query.user());
+    }
+
+    @Override
+    public List<Event> handle(GetAllEventsByDueDateQuery query) {
+        return eventRepository.findAllByDueDate(query.dueDate());
     }
 }
