@@ -42,8 +42,8 @@ public class Task extends AuditableAbstractAggregateRoot<Task> {
         this.taskName = command.taskName();
         this.taskDescription = command.taskDescription();
         this.dueDate = command.dueDate();
-        this.projectId = command.projectUUID();
-        this.userId = command.assignUser();
+        this.projectId = command.projectId();
+        this.userId = command.userId();
         this.status = TaskStatus.NEW;
     }
 
@@ -51,7 +51,7 @@ public class Task extends AuditableAbstractAggregateRoot<Task> {
         this.taskName = command.taskName();
         this.taskDescription = command.taskDescription();
         this.dueDate = command.dueDate();
-        this.userId = command.assignUser();
+        this.userId = command.userId();
         this.status = command.status();
         return this;
     }

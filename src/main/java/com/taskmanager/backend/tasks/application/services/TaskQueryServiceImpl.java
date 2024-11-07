@@ -47,4 +47,7 @@ public class TaskQueryServiceImpl implements TaskQueryService {
             return taskRepository.findByProjectId(query.projectId());
         }
     }
+
+    @Override
+    public List<Task> handle(GetTasksByDueDateQuery query){return this.taskRepository.findByDueDate(query.dueDate());}
 }

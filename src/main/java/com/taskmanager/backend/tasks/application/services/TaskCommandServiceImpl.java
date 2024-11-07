@@ -20,8 +20,8 @@ public class TaskCommandServiceImpl implements TaskCommandService {
 
     @Override
     public Optional<Task> handle(CreateTaskCommand command){
-        if (taskRepository.existsByTaskName(command.taskName())){
-            throw new IllegalArgumentException("A task with that name already exists");
+        if (taskRepository.existsByTaskNameAndProjectId(command.taskName(), command.projectId())){
+            throw new IllegalArgumentException("A task with that name already exists in the same project");
         }
         var task = new Task(command);
         try {
@@ -35,11 +35,12 @@ public class TaskCommandServiceImpl implements TaskCommandService {
 
     @Override
     public Optional<Task> handle(UpdateTaskCommand command) {
-        if (taskRepository.existsByTaskName(command.taskName())){
-            throw new IllegalArgumentException("A task with that name already exists");
-        }
         var task = taskRepository.findById(command.id());
         if(task.isEmpty()) throw new IllegalArgumentException("A task with that id does not exist");
+        var projectId = task.get().getProjectId();
+        if(taskRepository.existsByTaskNameAndProjectId(command.taskName(), projectId)){
+            throw new IllegalArgumentException("A task with that name already exists in the same project");
+        }
         var newTask = task.get();
         try {
             var updatedTask = taskRepository.save(newTask.updateTask(command));

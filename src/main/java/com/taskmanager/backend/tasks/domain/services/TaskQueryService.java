@@ -14,4 +14,5 @@ public interface TaskQueryService {
     List<Task> handle (GetAllTasksQuery query);
     List<Task> handle(GetAllTasksByProjectIdQuery query);
     List<Task> handle(GetTasksByUserIdQuery query);
+    List<Task> handle(GetTasksByDueDateQuery query);
 }
