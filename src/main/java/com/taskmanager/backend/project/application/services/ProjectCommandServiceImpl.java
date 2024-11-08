@@ -5,16 +5,20 @@ import com.taskmanager.backend.project.domain.model.commands.CreateProjectComman
 import com.taskmanager.backend.project.domain.model.commands.DeleteProjectCommand;
 import com.taskmanager.backend.project.domain.model.commands.UpdateProjectCommand;
 import com.taskmanager.backend.project.domain.services.ProjectCommandService;
+import com.taskmanager.backend.project.infrastructure.persistence.jpa.repositories.ProjectRepository;
+import com.taskmanager.backend.projectUsers.interfaces.acl.ProjectUserContextFacade;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class ProjectCommandServiceImplementation implements ProjectCommandService {
-    private final com.taskmanager.backend.project.infrastructure.persistence.jpa.repositories.ProjectRepository projectRepository;
+public class ProjectCommandServiceImpl implements ProjectCommandService {
+    private final ProjectRepository projectRepository;
+    private final ProjectUserContextFacade projectUserContextFacade;
 
-    public ProjectCommandServiceImplementation(com.taskmanager.backend.project.infrastructure.persistence.jpa.repositories.ProjectRepository projectRepository) {
+    public ProjectCommandServiceImpl(ProjectRepository projectRepository, ProjectUserContextFacade projectUserContextFacade) {
         this.projectRepository = projectRepository;
+        this.projectUserContextFacade = projectUserContextFacade;
     }
 
     @Override
@@ -34,10 +38,10 @@ public class ProjectCommandServiceImplementation implements ProjectCommandServic
 
     @Override
     public Optional<Project> handle(UpdateProjectCommand command) {
-        if (projectRepository.existsByProjectName(command.getProjectName())) {
+        if (projectRepository.existsByProjectName(command.projectName())) {
             throw new IllegalArgumentException("A project with that name already exists");
         }
-        var project = projectRepository.findById(command.getProjectId());
+        var project = projectRepository.findById(command.projectId());
         if (project.isEmpty()) throw new IllegalArgumentException("A project with that id does not exist");
         var newProject = project.get();
         try {
@@ -54,6 +58,7 @@ public class ProjectCommandServiceImplementation implements ProjectCommandServic
             throw new IllegalArgumentException("A project with that id does not exist");
         }
         try {
+            projectUserContextFacade.deleteUsersByProjectId(command.projectId());
             projectRepository.deleteById(command.projectId());
         } catch (Exception e) {
             throw new IllegalArgumentException("Error while deleting the project");

@@ -4,13 +4,12 @@ import com.taskmanager.backend.project.domain.model.aggregates.Project;
 import com.taskmanager.backend.project.interfaces.rest.resources.ProjectResource;
 
 public class ProjectResourceFromEntityAssembler {
-    public static ProjectResource transformResourceFromEntity(Project entity){
+    public static ProjectResource toResourceFromEntity(Project entity){
         return new ProjectResource(
                 entity.getId(),
                 entity.getProjectName(),
                 entity.getProjectDescription(),
-                entity.getProjectManager(),
-                entity.getProjectMember()
+                entity.getProjectLeader()
         );
     }
 }
