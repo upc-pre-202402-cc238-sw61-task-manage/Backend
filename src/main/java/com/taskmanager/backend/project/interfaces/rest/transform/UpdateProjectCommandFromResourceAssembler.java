@@ -8,10 +8,7 @@ public class UpdateProjectCommandFromResourceAssembler {
         return new UpdateProjectCommand(
                 projectId,
                 resource.projectName(),
-                resource.projectDescription(),
-                resource.startDate(),
-                resource.endDate(),
-                resource.projectManager()
+                resource.projectDescription()
         );
     }
 }

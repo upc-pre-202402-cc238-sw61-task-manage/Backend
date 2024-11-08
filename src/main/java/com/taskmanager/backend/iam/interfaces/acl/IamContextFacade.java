@@ -1,5 +1,6 @@
 package com.taskmanager.backend.iam.interfaces.acl;
 
+import com.taskmanager.backend.iam.domain.model.aggregates.User;
 import com.taskmanager.backend.iam.domain.model.commands.SignUpCommand;
 import com.taskmanager.backend.iam.domain.model.entities.Role;
 import com.taskmanager.backend.iam.domain.model.queries.GetUserByIdQuery;
@@ -7,6 +8,7 @@ import com.taskmanager.backend.iam.domain.model.queries.GetUserByUsernameQuery;
 import com.taskmanager.backend.iam.domain.services.UserCommandService;
 import com.taskmanager.backend.iam.domain.services.UserQueryService;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.List;
  * </p>
  *
  */
+@Service
 public class IamContextFacade {
     private final UserCommandService userCommandService;
     private final UserQueryService userQueryService;
@@ -67,6 +70,24 @@ public class IamContextFacade {
         var result = userQueryService.handle(getUserByUsernameQuery);
         if (result.isEmpty()) return 0L;
         return result.get().getId();
+    }
+
+    /**
+     * Fetches the id of the user with the given id.
+     * @param userId The id of the user.
+     * @return The id of the user.
+     */
+    public Long fetchUserIdByUserId(Long userId) {
+        var getUserByIdQuery = new GetUserByIdQuery(userId);
+        var result = userQueryService.handle(getUserByIdQuery);
+        if (result.isEmpty()) return 0L;
+        return result.get().getId();
+    }
+
+    public User fetchUserById(Long userId) {
+        var getUserByIdQuery = new GetUserByIdQuery(userId);
+        var result = userQueryService.handle(getUserByIdQuery);
+        return result.orElse(null);
     }
 
     /**

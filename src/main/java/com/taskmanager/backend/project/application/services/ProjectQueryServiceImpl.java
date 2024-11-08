@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProjectQueryServiceImplementation implements ProjectQueryService {
+public class ProjectQueryServiceImpl implements ProjectQueryService {
     private final ProjectRepository projectRepository;
-    public ProjectQueryServiceImplementation(ProjectRepository projectRepository) {
+    public ProjectQueryServiceImpl(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
     }
 

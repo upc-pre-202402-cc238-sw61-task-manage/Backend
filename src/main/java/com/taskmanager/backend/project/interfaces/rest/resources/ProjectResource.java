@@ -4,7 +4,6 @@ public record ProjectResource(
         Long id,
         String projectName,
         String projectDescription,
-        String projectManager,
-        String projectMember
+        String projectLeader
 ) {
 }

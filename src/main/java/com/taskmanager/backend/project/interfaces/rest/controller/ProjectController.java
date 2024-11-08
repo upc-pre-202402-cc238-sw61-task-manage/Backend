@@ -33,16 +33,16 @@ public class ProjectController {
     public ResponseEntity<ProjectResource> getProjectById(@PathVariable Long projectId) {
         var getProjectByIdQuery = new GetProjectByIdQuery(projectId);
         var project = projectQueryService.handle(getProjectByIdQuery);
-        if (project.isEmpty()) return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(ProjectResourceFromEntityAssembler.transformResourceFromEntity(project.get()));
+        return project.map(value -> ResponseEntity
+                .ok(ProjectResourceFromEntityAssembler.toResourceFromEntity(value)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
     public ResponseEntity<List<ProjectResource>> getAllProjects(){
         var getAllProjectsQuery = new GetAllProjectsQuery();
         var projects = projectQueryService.handle(getAllProjectsQuery);
-        var projectsResource = projects.stream().map(ProjectResourceFromEntityAssembler::transformResourceFromEntity).toList();
+        var projectsResource = projects.stream().map(ProjectResourceFromEntityAssembler::toResourceFromEntity).toList();
         return ResponseEntity.ok(projectsResource);
     }
 
@@ -51,7 +51,7 @@ public class ProjectController {
         var createProjectCommand = CreateProjectCommandFromResourceAssembler.toCommandFromResource(resource);
         var project = projectCommandService.handle(createProjectCommand);
         if (project.isEmpty()) return ResponseEntity.notFound().build();
-        var projectResource = ProjectResourceFromEntityAssembler.transformResourceFromEntity(project.get());
+        var projectResource = ProjectResourceFromEntityAssembler.toResourceFromEntity(project.get());
         return ResponseEntity.ok(projectResource);
     }
 
@@ -62,7 +62,7 @@ public class ProjectController {
         if (updatedProject.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        var projectResource = ProjectResourceFromEntityAssembler.transformResourceFromEntity(updatedProject.get());
+        var projectResource = ProjectResourceFromEntityAssembler.toResourceFromEntity(updatedProject.get());
         return ResponseEntity.ok(projectResource);
     }
 
@@ -72,6 +72,4 @@ public class ProjectController {
         projectCommandService.handle(deleteProjectCommand);
         return ResponseEntity.ok("Project deleted successfully");
     }
-
-
 }
