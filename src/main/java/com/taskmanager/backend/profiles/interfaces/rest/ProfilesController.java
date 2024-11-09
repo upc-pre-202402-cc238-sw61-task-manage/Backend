@@ -56,4 +56,26 @@ public class ProfilesController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(profileResources);
     }
+
+/*     @PutMapping("/{employeeId}")
+public ResponseEntity<EmployeeResource> updateEmployee(@PathVariable Long employeeId, @RequestBody UpdateEmployeeResource resource) {
+
+var updatedEmployeeCommand = UpdateCommandFromResourceAssembler.toUpdateCommand(employeeId, resource);
+var updatedCurse = employeeCommandService.handle(updatedEmployeeCommand);
+if (updatedCurse.isEmpty()) return ResponseEntity.badRequest().build();
+var employeeResource = EmployeeResourceFromEntityAssember.toResourceFromEntity(updatedCurse.get());
+return ResponseEntity.ok(employeeResource);
+}
+} */
+
+    @PutMapping("/{profileId}")
+    public ResponseEntity<ProfileResource> updateProfile(@PathVariable Long profileId, @RequestBody CreateProfileResource resource) {
+        var updateProfileCommand = CreateProfileCommandFromResourceAssembler.toCommandFromResource(resource);
+        var updatedProfile = profileCommandService.handle(updateProfileCommand);
+        if (updatedProfile.isEmpty()) return ResponseEntity.badRequest().build();
+        var profileResource = ProfileResourceFromEntityAssembler.toResourceFromEntity(updatedProfile.get());
+        return ResponseEntity.ok(profileResource);
+    }
+
+
 }
