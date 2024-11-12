@@ -21,4 +21,6 @@ public interface ProjectUserRepository extends JpaRepository<ProjectUser, Long> 
     @Modifying
     @Query("DELETE FROM ProjectUser pu WHERE pu.project.id = :projectId")
     void deleteByProjectId(@Param("projectId") Long projectId);
+
+    List<ProjectUser> findAllByProjectId(Long projectId);
 }
