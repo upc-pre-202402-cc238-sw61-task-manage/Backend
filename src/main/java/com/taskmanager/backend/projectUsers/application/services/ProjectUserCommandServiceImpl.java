@@ -4,11 +4,13 @@ import com.taskmanager.backend.iam.interfaces.acl.IamContextFacade;
 import com.taskmanager.backend.project.interfaces.acl.ProjectContextFacade;
 import com.taskmanager.backend.projectUsers.domain.model.aggregates.ProjectUser;
 import com.taskmanager.backend.projectUsers.domain.model.commands.CreateProjectUserCommand;
+import com.taskmanager.backend.projectUsers.domain.model.commands.DeleteAllUsersFromProjectCommand;
 import com.taskmanager.backend.projectUsers.domain.model.commands.DeleteProjectUserCommand;
 import com.taskmanager.backend.projectUsers.domain.services.ProjectUserCommandService;
 import com.taskmanager.backend.projectUsers.infrastructure.persistance.jpa.repositories.ProjectUserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -68,6 +70,21 @@ public class ProjectUserCommandServiceImpl implements ProjectUserCommandService 
                 .orElseThrow(() -> new RuntimeException("ProjectUser relation not found"));
 
         projectUserRepository.delete(projectUser);
+    }
+
+    @Override
+    public void handle(DeleteAllUsersFromProjectCommand command) {
+        Long projectId = projectContext.fetchProjectById(command.projectId()).getId();
+        if (projectId == 0L) {
+            throw new RuntimeException("Project not found");
+        }
+
+        List<ProjectUser> projectUsers = projectUserRepository.findAllByProjectId(projectId);
+        if (projectUsers.isEmpty()) {
+            throw new RuntimeException("No users found for the project");
+        }
+
+        projectUserRepository.deleteAll(projectUsers);
     }
 }
 

@@ -4,6 +4,7 @@ import com.taskmanager.backend.iam.interfaces.rest.resources.UserResource;
 import com.taskmanager.backend.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
 import com.taskmanager.backend.project.interfaces.rest.resources.ProjectResource;
 import com.taskmanager.backend.project.interfaces.rest.transform.ProjectResourceFromEntityAssembler;
+import com.taskmanager.backend.projectUsers.domain.model.commands.DeleteAllUsersFromProjectCommand;
 import com.taskmanager.backend.projectUsers.domain.services.ProjectUserCommandService;
 import com.taskmanager.backend.projectUsers.domain.services.ProjectUserQueryService;
 import com.taskmanager.backend.projectUsers.interfaces.rest.resources.CreateProjectUserResource;
@@ -44,6 +45,17 @@ public class ProjectUserController {
         var deleteProjectUserResourceCommand = DeleteProjectUserResourceCommandFromResourceAssembler.toCommandFromResource(resource);
         try {
             projectUserCommandService.handle(deleteProjectUserResourceCommand);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping("/project/{projectId}/users")
+    public ResponseEntity<Void> deleteAllUsersFromProject(@PathVariable Long projectId) {
+        try {
+            var deleteAllUsersFromProjectCommand = new DeleteAllUsersFromProjectCommand(projectId);
+            projectUserCommandService.handle(deleteAllUsersFromProjectCommand);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
