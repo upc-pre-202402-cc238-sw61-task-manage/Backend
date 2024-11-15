@@ -37,16 +37,18 @@ public class TaskCommandServiceImpl implements TaskCommandService {
     public Optional<Task> handle(UpdateTaskCommand command) {
         var task = taskRepository.findById(command.id());
         if(task.isEmpty()) throw new IllegalArgumentException("A task with that id does not exist");
+        var existingTask = task.get();
         var projectId = task.get().getProjectId();
-        if(taskRepository.existsByTaskNameAndProjectId(command.taskName(), projectId)){
-            throw new IllegalArgumentException("A task with that name already exists in the same project");
+        if (!existingTask.getTaskName().equals(command.taskName())) {
+            if(taskRepository.existsByTaskNameAndProjectId(command.taskName(), projectId)){
+                throw new IllegalArgumentException("A task with that name already exists in the same project");
+            }
         }
-        var newTask = task.get();
         try {
-            var updatedTask = taskRepository.save(newTask.updateTask(command));
+            var updatedTask = taskRepository.save(existingTask.updateTask(command));
             return Optional.of(updatedTask);
-        } catch (Exception e){
-            throw new IllegalArgumentException("Error while creating a new task");
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error while updating the task");
         }
     }
 
