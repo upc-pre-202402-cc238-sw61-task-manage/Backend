@@ -4,6 +4,7 @@ package com.taskmanager.backend.profiles.application.internal.commandservices;
 import com.taskmanager.backend.profiles.domain.model.agreggates.Profile;
 import com.taskmanager.backend.profiles.domain.model.commands.CreateProfileCommand;
 import com.taskmanager.backend.profiles.domain.model.commands.DeleteProfileCommand;
+import com.taskmanager.backend.profiles.domain.model.commands.UpdateProfileCommand;
 import com.taskmanager.backend.profiles.domain.model.valueobjects.EmailAddress;
 import com.taskmanager.backend.profiles.domain.services.ProfileCommandService;
 import com.taskmanager.backend.profiles.domain.services.ProfilePhotoService;
@@ -41,5 +42,19 @@ public class ProfileCommandServiceImpl implements ProfileCommandService {
                 .orElseThrow(() -> new IllegalArgumentException("Profile with id " + command.id() + " not found"));
         profile.close();
         profileRepository.save(profile);
+    }
+
+    @Override
+    public Optional<Profile> handle(UpdateProfileCommand command) {
+        if (!profileRepository.existsById(command.id())) {
+            throw new IllegalArgumentException("Profile with id " + command.id() + " not found");
+        }
+        Profile profile = profileRepository.findById(command.id()).get();
+        switch (command.property()) {
+            case "age":
+                profile.setAge((int) command.newValue());
+                break;
+        }
+        return Optional.of(profileRepository.save(profile));
     }
 }
