@@ -1,5 +1,7 @@
 package com.taskmanager.backend.profiles.interfaces.rest;
 
+import com.taskmanager.backend.profiles.domain.model.commands.DeleteProfileCommand;
+import com.taskmanager.backend.profiles.domain.model.commands.UpdateProfileCommand;
 import com.taskmanager.backend.profiles.domain.model.queries.GetAllProfilesQuery;
 import com.taskmanager.backend.profiles.domain.model.queries.GetProfileByIdQuery;
 import com.taskmanager.backend.profiles.domain.services.ProfileCommandService;
@@ -8,6 +10,7 @@ import com.taskmanager.backend.profiles.interfaces.rest.platform.CreateProfileCo
 import com.taskmanager.backend.profiles.interfaces.rest.platform.ProfileResourceFromEntityAssembler;
 import com.taskmanager.backend.profiles.interfaces.rest.resources.CreateProfileResource;
 import com.taskmanager.backend.profiles.interfaces.rest.resources.ProfileResource;
+import com.taskmanager.backend.profiles.interfaces.rest.resources.UpdateProfileResource;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -55,6 +58,7 @@ public class ProfilesController {
                 .map(ProfileResourceFromEntityAssembler::toResourceFromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(profileResources);
+        //
     }
 
 /*     @PutMapping("/{employeeId}")
@@ -68,13 +72,19 @@ return ResponseEntity.ok(employeeResource);
 }
 } */
 
-    @PutMapping("/{profileId}")
-    public ResponseEntity<ProfileResource> updateProfile(@PathVariable Long profileId, @RequestBody CreateProfileResource resource) {
-        var updateProfileCommand = CreateProfileCommandFromResourceAssembler.toCommandFromResource(resource);
-        var updatedProfile = profileCommandService.handle(updateProfileCommand);
-        if (updatedProfile.isEmpty()) return ResponseEntity.badRequest().build();
-        var profileResource = ProfileResourceFromEntityAssembler.toResourceFromEntity(updatedProfile.get());
+    @PatchMapping("/{profileId}")
+    public ResponseEntity<ProfileResource> updateProfile(@PathVariable Long profileId, @RequestBody UpdateProfileResource resource) {
+        var profile = profileCommandService.handle(new UpdateProfileCommand(profileId, resource.property(), resource.newValue()));
+        if (profile.isEmpty()) return ResponseEntity.badRequest().build();
+        var profileResource = ProfileResourceFromEntityAssembler.toResourceFromEntity(profile.get());
         return ResponseEntity.ok(profileResource);
+    }
+
+    @PostMapping("/delete/{profileId}")
+    public ResponseEntity<Void> deleteProfile(@PathVariable Long profileId) {
+        var deleteProfileCommand = new DeleteProfileCommand(profileId);
+        profileCommandService.handle(deleteProfileCommand);
+        return ResponseEntity.noContent().build();
     }
 
 
