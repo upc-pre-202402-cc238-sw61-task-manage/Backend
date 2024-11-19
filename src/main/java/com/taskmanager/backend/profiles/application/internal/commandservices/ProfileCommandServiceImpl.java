@@ -3,6 +3,7 @@ package com.taskmanager.backend.profiles.application.internal.commandservices;
 
 import com.taskmanager.backend.profiles.domain.model.agreggates.Profile;
 import com.taskmanager.backend.profiles.domain.model.commands.CreateProfileCommand;
+import com.taskmanager.backend.profiles.domain.model.commands.DeleteProfileCommand;
 import com.taskmanager.backend.profiles.domain.model.valueobjects.EmailAddress;
 import com.taskmanager.backend.profiles.domain.services.ProfileCommandService;
 import com.taskmanager.backend.profiles.domain.services.ProfilePhotoService;
@@ -32,5 +33,13 @@ public class ProfileCommandServiceImpl implements ProfileCommandService {
         var profile = new Profile(command, profilePhoto);
         profileRepository.save(profile);
         return Optional.of(profile);
+    }
+
+    @Override
+    public void handle(DeleteProfileCommand command) {
+        Profile profile = profileRepository.findById(command.id())
+                .orElseThrow(() -> new IllegalArgumentException("Profile with id " + command.id() + " not found"));
+        profile.close();
+        profileRepository.save(profile);
     }
 }

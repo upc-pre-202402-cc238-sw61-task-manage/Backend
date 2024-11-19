@@ -10,6 +10,9 @@ import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 @Entity
 public class Profile extends AuditableAbstractAggregateRoot <Profile> {
     @Embedded
@@ -29,11 +32,20 @@ public class Profile extends AuditableAbstractAggregateRoot <Profile> {
     @Setter
     private String profilePhoto;
 
+    @Getter
+    @Setter
+    private int age;
+
+    @Getter
+    private boolean active;
+
     public Profile(String firstName, String lastName, String email,Long userId, String profilePhoto) {
         this.name = new PersonName(firstName, lastName);
         this.email = new EmailAddress(email);
         this.userId=new UserId(userId);
         this.profilePhoto = profilePhoto;
+        this.age = 0;
+        this.active = true;
     }
 
     public Profile(CreateProfileCommand command, String profilePhoto) {
@@ -42,7 +54,8 @@ public class Profile extends AuditableAbstractAggregateRoot <Profile> {
         this.email = new EmailAddress(command.email());
         this.userId=new UserId(command.userId());
         this.profilePhoto = profilePhoto;
-
+        this.age = ThreadLocalRandom.current().nextInt(18, 65);
+        this.active = true;
     }
 
     public Profile() {
@@ -62,6 +75,11 @@ public class Profile extends AuditableAbstractAggregateRoot <Profile> {
     public String getEmailAddress() { return email.address(); }
 
     public Long getUserId() { return userId.userId(); }
+
+    public void close() {
+        this.active = false;
+    }
+
 
 }
 

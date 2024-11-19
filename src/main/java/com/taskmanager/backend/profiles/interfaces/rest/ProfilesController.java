@@ -1,5 +1,6 @@
 package com.taskmanager.backend.profiles.interfaces.rest;
 
+import com.taskmanager.backend.profiles.domain.model.commands.DeleteProfileCommand;
 import com.taskmanager.backend.profiles.domain.model.queries.GetAllProfilesQuery;
 import com.taskmanager.backend.profiles.domain.model.queries.GetProfileByIdQuery;
 import com.taskmanager.backend.profiles.domain.services.ProfileCommandService;
@@ -69,13 +70,20 @@ return ResponseEntity.ok(employeeResource);
 }
 } */
 
-    @PutMapping("/{profileId}")
-    public ResponseEntity<ProfileResource> updateProfile(@PathVariable Long profileId, @RequestBody CreateProfileResource resource) {
-        var updateProfileCommand = CreateProfileCommandFromResourceAssembler.toCommandFromResource(resource);
-        var updatedProfile = profileCommandService.handle(updateProfileCommand);
-        if (updatedProfile.isEmpty()) return ResponseEntity.badRequest().build();
-        var profileResource = ProfileResourceFromEntityAssembler.toResourceFromEntity(updatedProfile.get());
-        return ResponseEntity.ok(profileResource);
+//    @PutMapping("/{profileId}")
+//    public ResponseEntity<ProfileResource> updateProfile(@PathVariable Long profileId, @RequestBody CreateProfileResource resource) {
+//        var updateProfileCommand = CreateProfileCommandFromResourceAssembler.toCommandFromResource(resource);
+//        var updatedProfile = profileCommandService.handle(updateProfileCommand);
+//        if (updatedProfile.isEmpty()) return ResponseEntity.badRequest().build();
+//        var profileResource = ProfileResourceFromEntityAssembler.toResourceFromEntity(updatedProfile.get());
+//        return ResponseEntity.ok(profileResource);
+//    }
+
+    @PostMapping("/delete/{profileId}")
+    public ResponseEntity<Void> deleteProfile(@PathVariable Long profileId) {
+        var deleteProfileCommand = new DeleteProfileCommand(profileId);
+        profileCommandService.handle(deleteProfileCommand);
+        return ResponseEntity.noContent().build();
     }
 
 
