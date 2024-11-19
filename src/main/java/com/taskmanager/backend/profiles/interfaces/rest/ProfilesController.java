@@ -55,6 +55,7 @@ public class ProfilesController {
                 .map(ProfileResourceFromEntityAssembler::toResourceFromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(profileResources);
+        //
     }
 
 /*     @PutMapping("/{employeeId}")

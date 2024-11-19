@@ -6,6 +6,7 @@ public record ProfileResource(
         String lastName,
         String email,
         String phoneNumber,
+        String profilePhoto,
         Long userId
 ) {
 }
