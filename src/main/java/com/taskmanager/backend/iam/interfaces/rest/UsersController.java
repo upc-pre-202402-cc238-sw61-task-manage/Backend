@@ -5,6 +5,7 @@ import com.taskmanager.backend.iam.domain.model.queries.GetUserByIdQuery;
 import com.taskmanager.backend.iam.domain.services.UserQueryService;
 import com.taskmanager.backend.iam.interfaces.rest.resources.UserResource;
 import com.taskmanager.backend.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
+import com.taskmanager.backend.shared.constants.AppConstants;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,10 @@ import java.util.List;
  * This class is a REST controller that exposes the users resource.
  * It includes the following operations:
  * - GET /api/v1/users: returns all the users
- * - GET /api/v1/users/{userId}: returns the user with the given id
+ * - GET /api/v1/users/{userId}: returns the user with the given taskId
  **/
 @RestController
-@RequestMapping(value = "/api/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = AppConstants.API_BASE_PATH + "/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Users", description = "User Management Endpoints")
 public class UsersController {
     private final UserQueryService userQueryService;
@@ -45,9 +46,9 @@ public class UsersController {
     }
 
     /**
-     * This method returns the user with the given id.
-     * @param userId the user id
-     * @return the user resource with the given id
+     * This method returns the user with the given taskId.
+     * @param userId the user taskId
+     * @return the user resource with the given taskId
      * @throws RuntimeException if the user is not found
      * @see UserResource
      */

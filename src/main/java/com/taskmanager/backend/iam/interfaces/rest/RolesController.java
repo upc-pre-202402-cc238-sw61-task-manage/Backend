@@ -4,6 +4,7 @@ import com.taskmanager.backend.iam.domain.model.queries.GetAllRolesQuery;
 import com.taskmanager.backend.iam.domain.services.RoleQueryService;
 import com.taskmanager.backend.iam.interfaces.rest.resources.RoleResource;
 import com.taskmanager.backend.iam.interfaces.rest.transform.RoleResourceFromEntityAssembler;
+import com.taskmanager.backend.shared.constants.AppConstants;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import java.util.List;
  *  This controller is responsible for handling all the requests related to roles
  */
 @RestController
-@RequestMapping(value = "/ap/v1/roles", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = AppConstants.API_BASE_PATH + "/roles", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Roles", description = "Role Management Endpoints")
 public class RolesController {
     private final RoleQueryService roleQueryService;

@@ -9,6 +9,7 @@ import com.taskmanager.backend.iam.interfaces.rest.transform.AuthenticatedUserRe
 import com.taskmanager.backend.iam.interfaces.rest.transform.SignInCommandFromResourceAssembler;
 import com.taskmanager.backend.iam.interfaces.rest.transform.SignUpCommandFromResourceAssembler;
 import com.taskmanager.backend.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
+import com.taskmanager.backend.shared.constants.AppConstants;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  */
 @RestController
-@RequestMapping(value = "/api/v1/authentication", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = AppConstants.API_BASE_PATH + "/authentication", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Authentication", description = "Authentication Endpoints")
 public class AuthenticationController {
     private final UserCommandService userCommandService;

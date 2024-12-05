@@ -1,16 +1,18 @@
 package com.taskmanager.backend.project.domain.model.aggregates;
 
-import com.taskmanager.backend.project.domain.model.commands.CreateProjectCommand;
-import com.taskmanager.backend.project.domain.model.commands.UpdateProjectCommand;
+import com.taskmanager.backend.calendar.domain.model.aggregates.Event;
+import com.taskmanager.backend.project.domain.model.commands.projectcommands.CreateProjectCommand;
+import com.taskmanager.backend.project.domain.model.commands.projectcommands.UpdateProjectCommand;
 import com.taskmanager.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.taskmanager.backend.project.domain.model.entities.Task;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,23 +21,31 @@ import lombok.Setter;
 @AllArgsConstructor
 @Table(name = "projects")
 public class Project extends AuditableAbstractAggregateRoot<Project> {
-    @AttributeOverride(name = "value", column = @Column(name = "project_name"))
-    private String projectName;
-    @AttributeOverride(name = "value", column = @Column(name = "project_description"))
-    private String projectDescription;
-    @AttributeOverride(name = "value", column = @Column(name = "project_leader"))
-    private String projectLeader;
+    @AttributeOverride(name = "value", column = @Column(name = "title"))
+    private String title;
+    @AttributeOverride(name = "value", column = @Column(name = "description"))
+    private String description;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> taskList = new ArrayList<>();
+
+    @AttributeOverride(name = "value", column = @Column(name = "leader"))
+    private String leader;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Event> eventList = new ArrayList<>();
 
     public Project(CreateProjectCommand command){
-        this.projectName = command.projectName();
-        this.projectDescription = command.projectDescription();
-        this.projectLeader = command.projectLeader();
+        this.title = command.title();
+        this.description = command.description();
+        this.leader = command.leader();
+        this.taskList = new ArrayList<>();
+        this.eventList = new ArrayList<>();
     }
 
     public Project updateProject(UpdateProjectCommand command) {
-        this.projectName = command.projectName();
-        this.projectDescription = command.projectDescription();
+        this.title = command.title();
+        this.description = command.description();
         return this;
     }
-    
 }

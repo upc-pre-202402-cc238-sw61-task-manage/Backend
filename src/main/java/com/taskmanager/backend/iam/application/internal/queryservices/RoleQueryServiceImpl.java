@@ -37,8 +37,8 @@ public class RoleQueryServiceImpl implements RoleQueryService {
     }
 
     /**
-     * Handle the get role by name query
-     * @param query the get role by name query
+     * Handle the get role by title query
+     * @param query the get role by title query
      * @return Optional<Role> the role
      */
     @Override

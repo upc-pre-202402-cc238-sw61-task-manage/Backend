@@ -1,12 +1,12 @@
 package com.taskmanager.backend.project.interfaces.acl;
 
 import com.taskmanager.backend.project.domain.model.aggregates.Project;
-import com.taskmanager.backend.project.domain.model.commands.CreateProjectCommand;
-import com.taskmanager.backend.project.domain.model.commands.DeleteProjectCommand;
-import com.taskmanager.backend.project.domain.model.commands.UpdateProjectCommand;
-import com.taskmanager.backend.project.domain.model.queries.GetProjectByIdQuery;
-import com.taskmanager.backend.project.domain.services.ProjectCommandService;
-import com.taskmanager.backend.project.domain.services.ProjectQueryService;
+import com.taskmanager.backend.project.domain.model.commands.projectcommands.CreateProjectCommand;
+import com.taskmanager.backend.project.domain.model.commands.projectcommands.DeleteProjectCommand;
+import com.taskmanager.backend.project.domain.model.commands.projectcommands.UpdateProjectCommand;
+import com.taskmanager.backend.project.domain.model.queries.projectqueries.GetProjectByIdQuery;
+import com.taskmanager.backend.project.domain.services.commandservices.ProjectCommandService;
+import com.taskmanager.backend.project.domain.services.queryservices.ProjectQueryService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -28,11 +28,11 @@ public class ProjectContextFacade {
     }
 
     /**
-     * Creates a task with the given name, description and due date
-     * @param projectName The name of the Project
+     * Creates a task with the given title, description and due date
+     * @param projectName The title of the Project
      * @param projectDescription The complete description of the Project.
-     * @param projectLeader The leader of the project
-     * @return The id of the Task if it is created successfully
+     * @param projectLeader The leader of the projectId
+     * @return The taskId of the Task if it is created successfully
      */
     public Long createProject(String projectName, String projectDescription, String projectLeader) {
         var createProjectCommand = new CreateProjectCommand(projectName, projectDescription, projectLeader);
@@ -42,9 +42,9 @@ public class ProjectContextFacade {
     }
 
     /**
-     * Fetches the id of the Project with the given id
-     * @param projectId The name of the project
-     * @return the id of the project if it is found
+     * Fetches the taskId of the Project with the given taskId
+     * @param projectId The title of the projectId
+     * @return the taskId of the projectId if it is found
      */
     public Project fetchProjectById(Long projectId) {
         var getProjectById = new GetProjectByIdQuery(projectId);
@@ -54,9 +54,9 @@ public class ProjectContextFacade {
 
     /**
      * Updates the information of the Project with the given parameters
-     * @param projectName The name of the Project
+     * @param projectName The title of the Project
      * @param projectDescription The complete description of the Project.
-     * @return The id of the Project if it is created successfully
+     * @return The taskId of the Project if it is created successfully
      */
     public Long updateProject(Long projectId, String projectName, String projectDescription) {
         var updateProjectCommand = new UpdateProjectCommand(projectId, projectName, projectDescription);
@@ -66,8 +66,8 @@ public class ProjectContextFacade {
     }
 
     /**
-     * Deletes the Project of the given id
-     * @param projectId The id of the Project
+     * Deletes the Project of the given taskId
+     * @param projectId The taskId of the Project
      * @return true if the Project is deleted successfully
      */
     public boolean deleteProject(Long projectId) {

@@ -35,8 +35,8 @@ public class Role {
     }
 
     /**
-     * Get the name of the role as a string
-     * @return the name of the role as a string
+     * Get the title of the role as a string
+     * @return the title of the role as a string
      */
     public String getStringName() {
         return name.name();
@@ -51,8 +51,8 @@ public class Role {
     }
 
     /**
-     * Get the role from its name
-     * @param name the name of the role
+     * Get the role from its title
+     * @param name the title of the role
      * @return the role
      */
     public static Role toRoleFromName(String name) {
