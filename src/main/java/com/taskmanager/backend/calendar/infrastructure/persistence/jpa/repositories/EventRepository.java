@@ -2,6 +2,8 @@ package com.taskmanager.backend.calendar.infrastructure.persistence.jpa.reposito
 
 import com.taskmanager.backend.calendar.domain.model.aggregates.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -11,6 +13,6 @@ import java.util.List;
 public interface EventRepository extends JpaRepository<Event, Long> {
     boolean existsByTitleAndProjectId(String title, Long projectId);
     List<Event> findAllByProjectId(Long projectId);
-    List<Event> findAllByDate(LocalDateTime date);
-    void deleteByDateBefore(LocalDateTime date);
+    @Query("SELECT e FROM Event e WHERE e.dateRange.startDate >= :startOfDay AND e.dateRange.endDate < :endOfDay")
+    List<Event> findAllByDate(@Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);
 }

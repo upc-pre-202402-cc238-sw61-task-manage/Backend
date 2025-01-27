@@ -12,7 +12,7 @@ public class TaskResourceFromEntityAssembler {
                 entity.getDueDate(),
                 entity.getProject().getId(),
                 entity.getUserId(),
-                entity.getStatus()
+                entity.getStatus().getName()
         );
     }
 }

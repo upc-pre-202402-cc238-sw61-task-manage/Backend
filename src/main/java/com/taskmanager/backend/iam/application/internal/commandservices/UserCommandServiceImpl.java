@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 /**
- * User command service implementation
+ * <h3>User command service implementation</h3>
  * <p>
  *     This class implements the {@link UserCommandService} interface and provides the implementation for the
  *     {@link SignInCommand} and {@link SignUpCommand} commands.

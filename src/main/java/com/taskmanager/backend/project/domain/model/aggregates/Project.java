@@ -1,8 +1,8 @@
 package com.taskmanager.backend.project.domain.model.aggregates;
 
 import com.taskmanager.backend.calendar.domain.model.aggregates.Event;
-import com.taskmanager.backend.project.domain.model.commands.projectcommands.CreateProjectCommand;
-import com.taskmanager.backend.project.domain.model.commands.projectcommands.UpdateProjectCommand;
+import com.taskmanager.backend.project.domain.model.commands.projectCommands.CreateProjectCommand;
+import com.taskmanager.backend.project.domain.model.commands.projectCommands.UpdateProjectCommand;
 import com.taskmanager.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import com.taskmanager.backend.project.domain.model.entities.Task;
 import jakarta.persistence.*;
@@ -21,6 +21,10 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "projects")
 public class Project extends AuditableAbstractAggregateRoot<Project> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @AttributeOverride(name = "value", column = @Column(name = "title"))
     private String title;
     @AttributeOverride(name = "value", column = @Column(name = "description"))

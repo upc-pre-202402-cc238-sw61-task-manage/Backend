@@ -1,30 +1,34 @@
 package com.taskmanager.backend.calendar.application.internal.commandservices;
 
 import com.taskmanager.backend.calendar.domain.model.aggregates.Event;
-import com.taskmanager.backend.calendar.domain.model.commands.eventcommands.CreateEventCommand;
-import com.taskmanager.backend.calendar.domain.model.commands.eventcommands.DeleteEventCommand;
-import com.taskmanager.backend.calendar.domain.model.commands.eventcommands.PatchEventColorCommand;
-import com.taskmanager.backend.calendar.domain.model.commands.eventcommands.UpdateEventCommand;
+import com.taskmanager.backend.calendar.domain.model.commands.eventcommands.*;
+import com.taskmanager.backend.calendar.domain.model.valueobjects.EventColorList;
 import com.taskmanager.backend.calendar.domain.services.commandservices.EventCommandService;
+import com.taskmanager.backend.calendar.infrastructure.persistence.jpa.repositories.EventColorRepository;
 import com.taskmanager.backend.calendar.infrastructure.persistence.jpa.repositories.EventRepository;
 import com.taskmanager.backend.project.domain.model.aggregates.Project;
 import com.taskmanager.backend.project.interfaces.acl.ProjectContextFacade;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
+/**
+ * <h3>Event Command Service Implementation</h3>
+ * This class implements the {@link EventCommandService} interface and provides the implementation
+ * for the {@link CreateEventCommand}, {@link UpdateEventCommand}, {@link PatchEventColorCommand},
+ * {@link PatchEventDateCommand} and {@link DeleteEventCommand}
+ */
 @Service
 public class EventCommandServiceImpl implements EventCommandService {
     private final EventRepository eventRepository;
+    private final EventColorRepository eventColorRepository;
     private final ProjectContextFacade projectContextFacade;
 
-    public EventCommandServiceImpl(EventRepository eventRepository, ProjectContextFacade projectContextFacade) {
+    public EventCommandServiceImpl(EventRepository eventRepository, ProjectContextFacade projectContextFacade, EventColorRepository eventColorRepository) {
         this.eventRepository = eventRepository;
+        this.eventColorRepository = eventColorRepository;
         this.projectContextFacade = projectContextFacade;
     }
-
 
     private void existsEventWithSameTitle(String title, Long projectId) {
         if(eventRepository.existsByTitleAndProjectId(title, projectId)){
@@ -32,12 +36,21 @@ public class EventCommandServiceImpl implements EventCommandService {
         }
     }
 
+    private Event findEvent(Long eventId){
+        var event = eventRepository.findById(eventId);
+        if(event.isEmpty()) throw new RuntimeException("Event not found");
+        return event.get();
+    }
+
     @Override
     public Optional<Event> handle(CreateEventCommand command) {
         Project project = projectContextFacade.fetchProjectById(command.projectId());
+        var color = eventColorRepository
+                .findByName(EventColorList.BLUE)
+                .orElseThrow(() -> new RuntimeException("Color not found"));
         if(project == null) return Optional.empty();
         existsEventWithSameTitle(command.title(), command.projectId());
-        var event = new Event(command, project);
+        var event = new Event(command, project, color);
         try{
             eventRepository.save(event);
         }catch(Exception e){
@@ -48,26 +61,36 @@ public class EventCommandServiceImpl implements EventCommandService {
 
     @Override
     public Optional<Event> handle(UpdateEventCommand command) {
-        var event = eventRepository.findById(command.id());
-        if(event.isEmpty()) return Optional.empty();
-        var existingEvent = event.get();
-        var projectId = event.get().getProject().getId();
-        if(!existingEvent.getTitle().equals(command.title())) existsEventWithSameTitle(command.title(), projectId);
+        var event = findEvent(command.id());
+        var projectId = event.getProject().getId();
+        if(!event.getTitle().equals(command.title()))
+            existsEventWithSameTitle(command.title(), projectId);
         try {
-            var updatedEvent = eventRepository.save(existingEvent.updateEvent(command.title(), command.description(), command.date()));
+            var updatedEvent = eventRepository.save(event.updateEvent(command));
             return Optional.of(updatedEvent);
         } catch (Exception e){
             throw new IllegalArgumentException("Error while updating event" + e.getMessage());
         }
     }
-
     @Override
     public Optional<Event> handle(PatchEventColorCommand command) {
-        var result = eventRepository.findById(command.id());
-        if(result.isEmpty()) return Optional.empty();
-        var eventToPatch = result.get();
+        var event = findEvent(command.id());
+        var color = eventColorRepository
+                .findByName(command.color())
+                .orElseThrow(() -> new RuntimeException("Color not found"));
         try {
-            var patchedEvent = eventRepository.save(eventToPatch.patchColor(command));
+            var patchedEvent = eventRepository.save(event.patchColor(color));
+            return Optional.of(patchedEvent);
+        } catch (Exception e){
+            throw new IllegalArgumentException("Error while patching event" + e.getMessage());
+        }
+    }
+
+    @Override
+    public Optional<Event> handle(PatchEventDateCommand command) {
+        var event = findEvent(command.id());
+        try {
+            var patchedEvent = eventRepository.save(event);
             return Optional.of(patchedEvent);
         } catch (Exception e){
             throw new IllegalArgumentException("Error while patching event" + e.getMessage());
@@ -85,12 +108,5 @@ public class EventCommandServiceImpl implements EventCommandService {
             throw new IllegalArgumentException("Error while deleting event" + e.getMessage());
         }
 
-    }
-
-    @Override
-    @Scheduled(cron = "0 0 0 * * ?")
-    public void deleteExpiredEvents() {
-        LocalDateTime now = LocalDateTime.now();
-        eventRepository.deleteByDateBefore(now);
     }
 }

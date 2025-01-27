@@ -1,10 +1,10 @@
 package com.taskmanager.backend.project.domain.services.commandservices;
 
-import com.taskmanager.backend.project.domain.model.commands.taskcommands.PatchTaskStatusCommand;
+import com.taskmanager.backend.project.domain.model.commands.taskCommands.PatchTaskStatusCommand;
 import com.taskmanager.backend.project.domain.model.entities.Task;
-import com.taskmanager.backend.project.domain.model.commands.taskcommands.CreateTaskCommand;
-import com.taskmanager.backend.project.domain.model.commands.taskcommands.DeleteTaskCommand;
-import com.taskmanager.backend.project.domain.model.commands.taskcommands.UpdateTaskCommand;
+import com.taskmanager.backend.project.domain.model.commands.taskCommands.CreateTaskCommand;
+import com.taskmanager.backend.project.domain.model.commands.taskCommands.DeleteTaskCommand;
+import com.taskmanager.backend.project.domain.model.commands.taskCommands.UpdateTaskCommand;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

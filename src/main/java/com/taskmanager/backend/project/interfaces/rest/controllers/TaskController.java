@@ -1,10 +1,10 @@
 package com.taskmanager.backend.project.interfaces.rest.controllers;
 
-import com.taskmanager.backend.project.domain.model.commands.taskcommands.PatchTaskStatusCommand;
-import com.taskmanager.backend.project.domain.model.queries.taskqueries.*;
+import com.taskmanager.backend.project.domain.model.commands.taskCommands.PatchTaskStatusCommand;
+import com.taskmanager.backend.project.domain.model.queries.taskQueries.*;
 import com.taskmanager.backend.shared.constants.AppConstants;
-import com.taskmanager.backend.project.domain.model.commands.taskcommands.DeleteTaskCommand;
-import com.taskmanager.backend.project.domain.model.valueobjects.TaskStatus;
+import com.taskmanager.backend.project.domain.model.commands.taskCommands.DeleteTaskCommand;
+import com.taskmanager.backend.project.domain.model.valueobjects.TaskStatusList;
 import com.taskmanager.backend.project.domain.services.commandservices.TaskCommandService;
 import com.taskmanager.backend.project.domain.services.queryservices.TaskQueryService;
 import com.taskmanager.backend.project.interfaces.rest.resources.taskResources.CreateTaskResource;
@@ -17,7 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -64,7 +64,7 @@ public class TaskController {
     @GetMapping("/project/{projectId}")
     public ResponseEntity<List<TaskResource>> getAllTasksByProjectId(
             @PathVariable Long projectId,
-            @RequestParam(required = false) TaskStatus status) {
+            @RequestParam(required = false) TaskStatusList status) {
         var getAllTasksByProjectIdQuery = new GetAllTasksByProjectIdQuery(projectId, null, status);
         var tasks = taskQueryService.handle(getAllTasksByProjectIdQuery);
         var tasksResource = tasks.stream()
@@ -77,7 +77,7 @@ public class TaskController {
     public ResponseEntity<List<TaskResource>> getAllTasksByProjectIdAndUserId(
             @PathVariable Long projectId,
             @PathVariable Long userId,
-            @RequestParam(required = false) TaskStatus status) {
+            @RequestParam(required = false) TaskStatusList status) {
         var getAllTasksByProjectIdQuery = new GetAllTasksByProjectIdQuery(projectId, userId, status);
         var tasks = taskQueryService.handle(getAllTasksByProjectIdQuery);
         var tasksResource = tasks.stream()
@@ -87,7 +87,7 @@ public class TaskController {
     }
 
     @GetMapping("/due_date/{dueDate}")
-    public ResponseEntity<List<TaskResource>> getTasksByDueDate(@PathVariable LocalDate dueDate) {
+    public ResponseEntity<List<TaskResource>> getTasksByDueDate(@PathVariable LocalDateTime dueDate) {
         var getTaskByDueDateQuery = new GetTasksByDueDateQuery(dueDate);
         var tasks = taskQueryService.handle(getTaskByDueDateQuery);
         var taskResource = tasks.stream()
@@ -116,8 +116,8 @@ public class TaskController {
         return ResponseEntity.ok(taskResource);
     }
 
-    @PatchMapping("status/{status}/task/{taskId}")
-    public ResponseEntity<TaskResource> patchTaskStatus(@PathVariable Long taskId, @PathVariable TaskStatus status) {
+    @PatchMapping("/{taskId}/status/{status}")
+    public ResponseEntity<TaskResource> patchTaskStatus(@PathVariable Long taskId, @PathVariable TaskStatusList status) {
         var patchTaskStatusCommand = new PatchTaskStatusCommand(taskId, status);
         var patchedTask = taskCommandService.handle(patchTaskStatusCommand);
         if (patchedTask.isEmpty()) return ResponseEntity.notFound().build();

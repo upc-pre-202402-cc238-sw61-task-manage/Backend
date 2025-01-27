@@ -1,9 +1,9 @@
 package com.taskmanager.backend.project.domain.services.commandservices;
 
 import com.taskmanager.backend.project.domain.model.aggregates.Project;
-import com.taskmanager.backend.project.domain.model.commands.projectcommands.CreateProjectCommand;
-import com.taskmanager.backend.project.domain.model.commands.projectcommands.DeleteProjectCommand;
-import com.taskmanager.backend.project.domain.model.commands.projectcommands.UpdateProjectCommand;
+import com.taskmanager.backend.project.domain.model.commands.projectCommands.CreateProjectCommand;
+import com.taskmanager.backend.project.domain.model.commands.projectCommands.DeleteProjectCommand;
+import com.taskmanager.backend.project.domain.model.commands.projectCommands.UpdateProjectCommand;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

@@ -1,8 +1,8 @@
 package com.taskmanager.backend.project.domain.services.commandservices;
 
-import com.taskmanager.backend.project.domain.model.commands.projectusercommands.CreateProjectUserCommand;
-import com.taskmanager.backend.project.domain.model.commands.projectusercommands.DeleteAllUsersFromProjectCommand;
-import com.taskmanager.backend.project.domain.model.commands.projectusercommands.DeleteProjectUserCommand;
+import com.taskmanager.backend.project.domain.model.commands.projectUserCommands.CreateProjectUserCommand;
+import com.taskmanager.backend.project.domain.model.commands.projectUserCommands.DeleteAllUsersFromProjectCommand;
+import com.taskmanager.backend.project.domain.model.commands.projectUserCommands.DeleteProjectUserCommand;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -8,6 +8,7 @@ import com.taskmanager.backend.calendar.domain.services.queryservices.EventQuery
 import com.taskmanager.backend.calendar.infrastructure.persistence.jpa.repositories.EventRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,8 @@ public class EventQueryServiceImpl implements EventQueryService {
 
     @Override
     public List<Event> handle(GetAllEventsByDateQuery query) {
-        return eventRepository.findAllByDate(query.date());
+        LocalDateTime startDate = query.date().atStartOfDay();
+        LocalDateTime endDate = query.date().atStartOfDay();
+        return eventRepository.findAllByDate(startDate, endDate);
     }
 }

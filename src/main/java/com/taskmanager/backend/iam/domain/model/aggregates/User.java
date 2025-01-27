@@ -22,6 +22,9 @@ import java.util.Set;
 @Setter
 @Entity
 public class User extends AuditableAbstractAggregateRoot<User> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotBlank
     @Size(max = 50)

@@ -1,19 +1,19 @@
 package com.taskmanager.backend.project.interfaces.acl;
 
 import com.taskmanager.backend.project.domain.model.entities.Task;
-import com.taskmanager.backend.project.domain.model.commands.taskcommands.CreateTaskCommand;
-import com.taskmanager.backend.project.domain.model.commands.taskcommands.DeleteTaskCommand;
-import com.taskmanager.backend.project.domain.model.commands.taskcommands.UpdateTaskCommand;
-import com.taskmanager.backend.project.domain.model.queries.taskqueries.GetTaskByIdQuery;
-import com.taskmanager.backend.project.domain.model.valueobjects.TaskStatus;
+import com.taskmanager.backend.project.domain.model.commands.taskCommands.CreateTaskCommand;
+import com.taskmanager.backend.project.domain.model.commands.taskCommands.DeleteTaskCommand;
+import com.taskmanager.backend.project.domain.model.commands.taskCommands.UpdateTaskCommand;
+import com.taskmanager.backend.project.domain.model.queries.taskQueries.GetTaskByIdQuery;
+import com.taskmanager.backend.project.domain.model.valueobjects.TaskStatusList;
 import com.taskmanager.backend.project.domain.services.commandservices.TaskCommandService;
 import com.taskmanager.backend.project.domain.services.queryservices.TaskQueryService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
- * Task Context Facade
+ * <h2>Task Context Facade</h2>
  * <p>
  *     This class is a facade for the Task context. It provides a simple
  *     interface for other bounded contexts to interact with the Task context
@@ -39,7 +39,7 @@ public class TaskContextFacade {
      * @param userId The taskId of the user the that the task belongs to
      * @return The taskId of the Task if it is created successfully
      */
-    public Long createTask(String taskName, String description, LocalDate dueDate, Long projectId, Long userId){
+    public Long createTask(String taskName, String description, LocalDateTime dueDate, Long projectId, Long userId){
         var createTaskCommand = new CreateTaskCommand(taskName, description, dueDate, projectId, userId);
         var result = taskCommandService.handle(createTaskCommand);
         if (result.isEmpty()) return 0L;
@@ -79,7 +79,7 @@ public class TaskContextFacade {
      * @param userId The taskId of the user the that the task belongs to
      * @return The taskId of the Task if the Task is updated successfully
      */
-    public Long updateTask(Long id, String taskName, String description, LocalDate dueDate, Long userId, TaskStatus status){
+    public Long updateTask(Long id, String taskName, String description, LocalDateTime dueDate, Long userId, TaskStatusList status){
         var updateTaskCommand = new UpdateTaskCommand(id, taskName, description, dueDate, userId, status);
         var result = taskCommandService.handle(updateTaskCommand);
         if (result.isEmpty()) return 0L;

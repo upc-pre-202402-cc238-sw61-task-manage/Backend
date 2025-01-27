@@ -3,20 +3,26 @@ package com.taskmanager.backend.calendar.domain.model.aggregates;
 
 import com.taskmanager.backend.calendar.domain.model.commands.eventcommands.CreateEventCommand;
 import com.taskmanager.backend.calendar.domain.model.commands.eventcommands.PatchEventColorCommand;
-import com.taskmanager.backend.calendar.domain.model.valueObjects.EventColor;
+import com.taskmanager.backend.calendar.domain.model.commands.eventcommands.PatchEventDateCommand;
+import com.taskmanager.backend.calendar.domain.model.commands.eventcommands.UpdateEventCommand;
+import com.taskmanager.backend.calendar.domain.model.entities.EventColor;
+import com.taskmanager.backend.calendar.domain.model.valueobjects.EventColorList;
 import com.taskmanager.backend.project.domain.model.aggregates.Project;
 import com.taskmanager.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
+import com.taskmanager.backend.shared.domain.model.valueobjects.DateRange;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.FutureOrPresent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @NoArgsConstructor
 public class Event extends AuditableAbstractAggregateRoot<Event> {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name="project_id", nullable = false)
@@ -28,32 +34,37 @@ public class Event extends AuditableAbstractAggregateRoot<Event> {
     @AttributeOverride(name = "value", column = @Column(name = "description"))
     private String description;
 
-    @AttributeOverride(name = "value", column = @Column(name = "date"))
-    @FutureOrPresent
-    private LocalDateTime date;
+    @Embedded
+    private DateRange dateRange;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name="color")
+    @ManyToOne
+    @JoinColumn(name = "color_id", nullable = false)
     private EventColor color;
 
-
-    public Event(CreateEventCommand command, Project project) {
+    public Event(CreateEventCommand command, Project project, EventColor color) {
         this.project = project;
         this.title = command.title();
         this.description = command.description();
-        this.date = command.date();
-        this.color = EventColor.BLUE;
+        this.dateRange = new DateRange(command.startDate(), command.endDate());
+        this.color = color;
     }
 
-    public Event updateEvent(String title, String description, LocalDateTime date) {
-        this.title = title;
-        this.description = description;
-        this.date = date;
+    public Event updateEvent(UpdateEventCommand command) {
+        this.title = command.title();
+        this.description = command.description();
+        this.dateRange.setStartDate(command.startDate());
+        this.dateRange.setEndDate(command.endDate());
         return this;
     }
 
-    public Event patchColor(PatchEventColorCommand command) {
-        this.color = command.color();
+    public Event patchEventDate(PatchEventDateCommand command){
+        this.dateRange.setStartDate(command.startDate());
+        this.dateRange.setEndDate(command.endDate());
+        return this;
+    }
+
+    public Event patchColor(EventColor color) {
+        this.color = color;
         return this;
     }
 

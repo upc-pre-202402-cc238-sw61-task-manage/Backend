@@ -1,17 +1,16 @@
 package com.taskmanager.backend.calendar.application.internal.commandservices;
 
-import com.taskmanager.backend.calendar.domain.model.aggregates.Event;
 import com.taskmanager.backend.calendar.domain.model.commands.eventusercommands.CreateEventUserCommand;
 import com.taskmanager.backend.calendar.domain.model.commands.eventusercommands.DeleteAllUsersFromEventCommand;
 import com.taskmanager.backend.calendar.domain.model.commands.eventusercommands.DeleteEventUserCommand;
 import com.taskmanager.backend.calendar.domain.model.entities.EventUser;
+import com.taskmanager.backend.calendar.domain.model.valueobjects.EventUserId;
 import com.taskmanager.backend.calendar.domain.services.commandservices.EventUserCommandService;
 import com.taskmanager.backend.calendar.infrastructure.persistence.jpa.repositories.EventRepository;
 import com.taskmanager.backend.calendar.infrastructure.persistence.jpa.repositories.EventUserRepository;
 import com.taskmanager.backend.iam.interfaces.acl.UserContextFacade;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,10 +29,10 @@ public class EventUserCommandServiceImpl implements EventUserCommandService {
         this.userContextFacade = userContextFacade;
     }
 
-    private Event findEvent(Long eventId){
+    private Long findEventId(Long eventId){
         var event = eventRepository.findById(eventId);
         if(event.isEmpty()) throw new RuntimeException("Event not found");
-        return event.get();
+        return event.get().getId();
     }
 
     private Long findUserId(Long userId){
@@ -43,37 +42,38 @@ public class EventUserCommandServiceImpl implements EventUserCommandService {
     }
 
     @Override
-    public void handle(CreateEventUserCommand command) {
-        var event = findEvent(command.eventId());
-        Long userId = findUserId(command.userId());
-
-        Optional<EventUser> existingEventUser = eventUserRepository.findByUserIdAndEventId(event.getId(), userId);
-        if(existingEventUser.isPresent()) throw new RuntimeException("The user is already in the event");
-
+    public Optional<EventUser> handle(CreateEventUserCommand command) {
+        var event = eventRepository.findById(command.eventId());
+        if(event.isEmpty()) throw new RuntimeException("Event not found");
+        var user = userContextFacade.fetchUserById(command.userId());
+        if(user == null) throw new RuntimeException("User not found");
+        EventUserId eventUserId = new EventUserId(event.get().getId(), user.getId());
+        if(eventUserRepository.existsById(eventUserId)) throw new RuntimeException("The user is already in the event");
         EventUser eventUser = new EventUser();
-        eventUser.setEvent(event);
-        eventUser.setUser(userContextFacade.fetchUserById(userId));
-
+        eventUser.setId(eventUserId);
+        eventUser.setUser(user);
+        eventUser.setEvent(event.get());
         eventUserRepository.save(eventUser);
+        return Optional.of(eventUser);
     }
 
     @Override
     public void handle(DeleteEventUserCommand command) {
-        var event = findEvent(command.eventId());
-        Long eventId = event.getId();
+        Long eventId = findEventId(command.eventId());
         Long userId = findUserId(command.userId());
-        EventUser eventUser = eventUserRepository
-                .findByUserIdAndEventId(eventId,userId)
-                .orElseThrow(()-> new RuntimeException("EventUser relation not found"));
+
+        EventUserId eventUserId = new EventUserId(eventId, userId);
+
+        EventUser eventUser = eventUserRepository.findById(eventUserId)
+                .orElseThrow(() -> new RuntimeException("EventUser relation not found"));
+
         eventUserRepository.delete(eventUser);
     }
 
     @Override
     public void handle(DeleteAllUsersFromEventCommand command) {
-        var eventId = findEvent(command.eventId()).getId();
-        List<EventUser> eventUsers = eventUserRepository.findByEventId(eventId);
-        if(eventUsers.isEmpty()) throw new RuntimeException("No users found in the event");
-
-        eventUserRepository.deleteAll(eventUsers);
+        var eventId = findEventId(command.eventId());
+        eventUserRepository.deleteByEventId(eventId);
     }
+
 }

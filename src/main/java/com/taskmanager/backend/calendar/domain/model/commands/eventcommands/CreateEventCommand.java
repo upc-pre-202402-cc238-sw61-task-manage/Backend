@@ -8,6 +8,7 @@ public record CreateEventCommand(
         @NotBlank Long projectId,
         @NotBlank String title,
         @NotBlank String description,
-        @NotBlank LocalDateTime date
+        @NotBlank LocalDateTime startDate,
+        @NotBlank LocalDateTime endDate
 ) {
 }

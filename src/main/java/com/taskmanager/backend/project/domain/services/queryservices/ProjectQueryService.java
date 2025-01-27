@@ -1,9 +1,9 @@
 package com.taskmanager.backend.project.domain.services.queryservices;
 
 import com.taskmanager.backend.project.domain.model.aggregates.Project;
-import com.taskmanager.backend.project.domain.model.queries.projectqueries.GetAllProjectsQuery;
-import com.taskmanager.backend.project.domain.model.queries.projectqueries.GetProjectByIdQuery;
-import com.taskmanager.backend.project.domain.model.queries.projectqueries.GetProjectByTitleQuery;
+import com.taskmanager.backend.project.domain.model.queries.projectQueries.GetAllProjectsQuery;
+import com.taskmanager.backend.project.domain.model.queries.projectQueries.GetProjectByIdQuery;
+import com.taskmanager.backend.project.domain.model.queries.projectQueries.GetProjectByTitleQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

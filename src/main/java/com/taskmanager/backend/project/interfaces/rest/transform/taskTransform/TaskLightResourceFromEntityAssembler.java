@@ -6,8 +6,10 @@ import com.taskmanager.backend.project.interfaces.rest.resources.taskResources.T
 public class TaskLightResourceFromEntityAssembler {
     public static TaskLightResource transformResourceFromEntity(Task entity){
         return new TaskLightResource(
+                entity.getId(),
                 entity.getTitle(),
-                entity.getDueDate()
+                entity.getDueDate(),
+                entity.getStatus().getName()
         );
     }
 }

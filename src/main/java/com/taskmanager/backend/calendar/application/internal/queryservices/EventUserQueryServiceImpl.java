@@ -12,6 +12,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * <h3>Event User Query Service Implementation</h3>
+ * This class implements the {@link EventUserQueryService} interface and provides an implementation for the
+ * {@link GetAllUsersByEventIdQuery} and {@link GetAllEventsByUserIdQuery}
+ */
 @Service
 public class EventUserQueryServiceImpl implements EventUserQueryService {
 
@@ -21,17 +26,29 @@ public class EventUserQueryServiceImpl implements EventUserQueryService {
         this.eventUserRepository = eventUserRepository;
     }
 
+    /**
+     * This method is used to handle the {@link GetAllUsersByEventIdQuery} query
+     * <p>It finds all the {@link User} from the Event User Table</p>
+     * @param query {@link GetAllUsersByEventIdQuery} instance
+     * @return {@link List} of {@link User}
+     */
     @Override
     public List<User> handle(GetAllUsersByEventIdQuery query) {
-        return eventUserRepository.findByEventId(query.eventId())
+        return eventUserRepository.findAllByEventId(query.eventId())
                 .stream()
                 .map(EventUser::getUser)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * This method is used to handle the {@link GetAllEventsByUserIdQuery} query
+     * <p>It finds all the {@link Event} from the Event User Table</p>
+     * @param query {@link GetAllEventsByUserIdQuery} instance
+     * @return {@link List} of {@link Event}
+     */
     @Override
     public List<Event> handle(GetAllEventsByUserIdQuery query) {
-        return eventUserRepository.findByUserId(query.userId())
+        return eventUserRepository.findAllByUserId(query.userId())
                 .stream()
                 .map(EventUser::getEvent)
                 .collect(Collectors.toList());

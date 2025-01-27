@@ -1,0 +1,7 @@
+package com.taskmanager.backend.calendar.interfaces.rest.resources.eventUserResources;
+
+public record EventUserResource(
+        Long eventId,
+        Long userId
+) {
+}

@@ -1,7 +1,7 @@
 package com.taskmanager.backend.project.domain.services.queryservices;
 
 import com.taskmanager.backend.project.domain.model.entities.Task;
-import com.taskmanager.backend.project.domain.model.queries.taskqueries.*;
+import com.taskmanager.backend.project.domain.model.queries.taskQueries.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

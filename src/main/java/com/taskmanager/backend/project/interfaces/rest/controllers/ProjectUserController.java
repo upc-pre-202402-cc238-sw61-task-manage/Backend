@@ -2,17 +2,17 @@ package com.taskmanager.backend.project.interfaces.rest.controllers;
 
 import com.taskmanager.backend.iam.interfaces.rest.resources.UserResource;
 import com.taskmanager.backend.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
-import com.taskmanager.backend.project.domain.model.queries.projectuserqueries.GetAllProjectsByUserIdQuery;
-import com.taskmanager.backend.project.domain.model.queries.projectuserqueries.GetAllUsersByProjectIdQuery;
-import com.taskmanager.backend.project.interfaces.rest.resources.projectresources.ProjectResource;
-import com.taskmanager.backend.project.interfaces.rest.transform.projecttransform.ProjectResourceFromEntityAssembler;
-import com.taskmanager.backend.project.domain.model.commands.projectusercommands.DeleteAllUsersFromProjectCommand;
+import com.taskmanager.backend.project.domain.model.queries.projectUserQueries.GetAllProjectsByUserIdQuery;
+import com.taskmanager.backend.project.domain.model.queries.projectUserQueries.GetAllUsersByProjectIdQuery;
+import com.taskmanager.backend.project.interfaces.rest.resources.projectResources.ProjectResource;
+import com.taskmanager.backend.project.interfaces.rest.transform.projectTransform.ProjectResourceFromEntityAssembler;
+import com.taskmanager.backend.project.domain.model.commands.projectUserCommands.DeleteAllUsersFromProjectCommand;
 import com.taskmanager.backend.project.domain.services.commandservices.ProjectUserCommandService;
 import com.taskmanager.backend.project.domain.services.queryservices.ProjectUserQueryService;
-import com.taskmanager.backend.project.interfaces.rest.resources.projectuserresources.CreateProjectUserResource;
-import com.taskmanager.backend.project.interfaces.rest.resources.projectuserresources.DeleteProjectUserResource;
-import com.taskmanager.backend.project.interfaces.rest.transform.projectusertransform.CreateProjectUserResourceCommandFromResourceAssembler;
-import com.taskmanager.backend.project.interfaces.rest.transform.projectusertransform.DeleteProjectUserResourceCommandFromResourceAssembler;
+import com.taskmanager.backend.project.interfaces.rest.resources.projectUserResources.CreateProjectUserResource;
+import com.taskmanager.backend.project.interfaces.rest.resources.projectUserResources.DeleteProjectUserResource;
+import com.taskmanager.backend.project.interfaces.rest.transform.projectUserTransform.CreateProjectUserResourceCommandFromResourceAssembler;
+import com.taskmanager.backend.project.interfaces.rest.transform.projectUserTransform.DeleteProjectUserResourceCommandFromResourceAssembler;
 import com.taskmanager.backend.shared.constants.AppConstants;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +32,7 @@ public class ProjectUserController {
         this.projectUserQueryService = projectUserQueryService;
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<Void> addUserToProject(@RequestBody CreateProjectUserResource resource) {
         var createProjectUserResourceCommand = CreateProjectUserResourceCommandFromResourceAssembler.toCommandFromResource(resource);
         try {
@@ -43,7 +43,7 @@ public class ProjectUserController {
         }
     }
 
-    @DeleteMapping("/remove")
+    @DeleteMapping
     public ResponseEntity<Void> deleteUserFromProject(@RequestBody DeleteProjectUserResource resource) {
         var deleteProjectUserResourceCommand = DeleteProjectUserResourceCommandFromResourceAssembler.toCommandFromResource(resource);
         try {

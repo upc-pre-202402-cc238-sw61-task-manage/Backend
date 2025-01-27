@@ -1,18 +1,17 @@
 package com.taskmanager.backend.project.domain.model.entities;
 
 import com.taskmanager.backend.project.domain.model.aggregates.Project;
-import com.taskmanager.backend.project.domain.model.commands.taskcommands.PatchTaskStatusCommand;
+import com.taskmanager.backend.project.domain.model.commands.taskCommands.PatchTaskStatusCommand;
 import com.taskmanager.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
-import com.taskmanager.backend.project.domain.model.commands.taskcommands.CreateTaskCommand;
-import com.taskmanager.backend.project.domain.model.commands.taskcommands.UpdateTaskCommand;
-import com.taskmanager.backend.project.domain.model.valueobjects.TaskStatus;
+import com.taskmanager.backend.project.domain.model.commands.taskCommands.CreateTaskCommand;
+import com.taskmanager.backend.project.domain.model.commands.taskCommands.UpdateTaskCommand;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -21,6 +20,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Table(name = "tasks")
 public class Task extends AuditableAbstractAggregateRoot<Task> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @AttributeOverride(name = "value", column = @Column(name = "title"))
     private String title;
 
@@ -28,7 +31,7 @@ public class Task extends AuditableAbstractAggregateRoot<Task> {
     private String description;
 
     @AttributeOverride(name = "value", column = @Column(name = "due_date"))
-    private LocalDate dueDate;
+    private LocalDateTime dueDate;
 
     @Getter
     @ManyToOne
@@ -38,30 +41,30 @@ public class Task extends AuditableAbstractAggregateRoot<Task> {
     @AttributeOverride(name = "value", column = @Column(name = "assign_user"))
     private Long userId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @ManyToOne
+    @JoinColumn(name = "status_id", nullable = false)
     private TaskStatus status;
 
-    public Task(CreateTaskCommand command, Project project){
+    public Task(CreateTaskCommand command, Project project, TaskStatus status){
         this.title = command.title();
         this.description = command.description();
         this.dueDate = command.dueDate();
         this.project = project;
         this.userId = command.userId();
-        this.status = TaskStatus.NEW;
+        this.status = status;
     }
 
-    public Task updateTask(UpdateTaskCommand command){
+    public Task updateTask(UpdateTaskCommand command, TaskStatus status){
         this.title = command.title();
         this.description = command.description();
         this.dueDate = command.dueDate();
         this.userId = command.userId();
-        this.status = command.status();
+        this.status = status;
         return this;
     }
 
-    public Task patchTaskStatus(PatchTaskStatusCommand command){
-        this.status = command.status();
+    public Task patchTaskStatus(TaskStatus status){
+        this.status = status;
         return this;
     }
 

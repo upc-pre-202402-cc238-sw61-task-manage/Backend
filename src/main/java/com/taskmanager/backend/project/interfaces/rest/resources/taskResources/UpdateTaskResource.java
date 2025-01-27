@@ -1,14 +1,14 @@
 package com.taskmanager.backend.project.interfaces.rest.resources.taskResources;
 
-import com.taskmanager.backend.project.domain.model.valueobjects.TaskStatus;
+import com.taskmanager.backend.project.domain.model.valueobjects.TaskStatusList;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record UpdateTaskResource(
         String taskName,
         String taskDescription,
-        LocalDate dueDate,
+        LocalDateTime dueDate,
         Long userId,
-        TaskStatus status
+        TaskStatusList status
 ) {
 }

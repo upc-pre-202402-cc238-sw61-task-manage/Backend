@@ -1,10 +1,10 @@
 package com.taskmanager.backend.project.interfaces.acl;
 
 import com.taskmanager.backend.project.domain.model.aggregates.Project;
-import com.taskmanager.backend.project.domain.model.commands.projectcommands.CreateProjectCommand;
-import com.taskmanager.backend.project.domain.model.commands.projectcommands.DeleteProjectCommand;
-import com.taskmanager.backend.project.domain.model.commands.projectcommands.UpdateProjectCommand;
-import com.taskmanager.backend.project.domain.model.queries.projectqueries.GetProjectByIdQuery;
+import com.taskmanager.backend.project.domain.model.commands.projectCommands.CreateProjectCommand;
+import com.taskmanager.backend.project.domain.model.commands.projectCommands.DeleteProjectCommand;
+import com.taskmanager.backend.project.domain.model.commands.projectCommands.UpdateProjectCommand;
+import com.taskmanager.backend.project.domain.model.queries.projectQueries.GetProjectByIdQuery;
 import com.taskmanager.backend.project.domain.services.commandservices.ProjectCommandService;
 import com.taskmanager.backend.project.domain.services.queryservices.ProjectQueryService;
 import org.springframework.stereotype.Service;
@@ -66,7 +66,7 @@ public class ProjectContextFacade {
     }
 
     /**
-     * Deletes the Project of the given taskId
+     * Deletes the Project with the given taskId
      * @param projectId The taskId of the Project
      * @return true if the Project is deleted successfully
      */
