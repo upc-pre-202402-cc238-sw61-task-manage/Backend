@@ -1,5 +1,6 @@
 package com.taskmanager.backend.iam.domain.model.aggregates;
 
+import com.taskmanager.backend.iam.domain.model.entities.Profile;
 import com.taskmanager.backend.iam.domain.model.entities.Role;
 import com.taskmanager.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import jakarta.persistence.*;
@@ -34,6 +35,10 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     @NotBlank
     @Size(max = 120)
     private String password;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "profile_id", unique = true)
+    private Profile profile;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(	name = "user_roles",

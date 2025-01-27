@@ -36,9 +36,9 @@ public class ProfileController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<ProfileResource> createProfile(@PathVariable Long id, @RequestBody CreateProfileResource resource) {
-        var createProfileCommand = CreateProfileCommandFromResourceAssembler.toCommandFromResource(resource, id);
+    @PostMapping("/{userId}")
+    public ResponseEntity<ProfileResource> createProfile(@PathVariable Long userId, @RequestBody CreateProfileResource resource) {
+        var createProfileCommand = CreateProfileCommandFromResourceAssembler.toCommandFromResource(resource, userId);
         var profile = profileCommandService.handle(createProfileCommand);
         if(profile.isEmpty()) return ResponseEntity.badRequest().build();
         var profileResource = ProfileResourceFromEntityAssembler.transformResourceFromEntity(profile.get());

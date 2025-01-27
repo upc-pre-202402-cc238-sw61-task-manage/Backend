@@ -37,12 +37,7 @@ public class Profile extends AuditableAbstractAggregateRoot<Profile> {
     @Column(nullable = true)
     private String profilePicture;
 
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    public Profile(CreateProfileCommand command, User user){
-        this.user = user;
+    public Profile(CreateProfileCommand command){
         this.firstName = command.firstName();
         this.lastName = command.lastName();
         this.email = command.email();
