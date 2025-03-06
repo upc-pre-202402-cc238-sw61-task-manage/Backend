@@ -6,6 +6,7 @@ import com.taskmanager.backend.project.interfaces.rest.resources.projectResource
 public class CreateProjectCommandFromResourceAssembler {
     public static CreateProjectCommand toCommandFromResource(CreateProjectResource resource){
         return new CreateProjectCommand(
+                resource.groupId(),
                 resource.title(),
                 resource.description(),
                 resource.leader()

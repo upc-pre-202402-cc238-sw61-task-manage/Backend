@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 
 public record UpdateProjectCommand (
         @NotBlank Long projectId,
-        @NotBlank String title,
-        @NotBlank String description
+        String title,
+        String description
 ){
 
 }

@@ -2,11 +2,9 @@ package com.taskmanager.backend.calendar.domain.model.aggregates;
 
 
 import com.taskmanager.backend.calendar.domain.model.commands.eventcommands.CreateEventCommand;
-import com.taskmanager.backend.calendar.domain.model.commands.eventcommands.PatchEventColorCommand;
 import com.taskmanager.backend.calendar.domain.model.commands.eventcommands.PatchEventDateCommand;
 import com.taskmanager.backend.calendar.domain.model.commands.eventcommands.UpdateEventCommand;
 import com.taskmanager.backend.calendar.domain.model.entities.EventColor;
-import com.taskmanager.backend.calendar.domain.model.valueobjects.EventColorList;
 import com.taskmanager.backend.project.domain.model.aggregates.Project;
 import com.taskmanager.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import com.taskmanager.backend.shared.domain.model.valueobjects.DateRange;

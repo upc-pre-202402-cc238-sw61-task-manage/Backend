@@ -15,7 +15,6 @@ import com.taskmanager.backend.iam.interfaces.rest.resources.UserResource;
 import com.taskmanager.backend.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
 import com.taskmanager.backend.shared.constants.AppConstants;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

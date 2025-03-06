@@ -650,17 +650,17 @@
       <tags>categoryTag:Ant</tags>
     </sharedElements>
     <trimBars xmi:id="_fwJh07_1Ee-518_TTNbL6g" elementId="org.eclipse.ui.main.toolbar" contributorURI="platform:/plugin/org.eclipse.platform">
-      <children xsi:type="menu:ToolBar" xmi:id="_gJq1EL_1Ee-518_TTNbL6g" elementId="group.file" toBeRendered="false">
+      <children xsi:type="menu:ToolBar" xmi:id="_gJq1EL_1Ee-518_TTNbL6g" elementId="team.file" toBeRendered="false">
         <tags>toolbarSeparator</tags>
-        <children xsi:type="menu:ToolBarSeparator" xmi:id="_gJq1Eb_1Ee-518_TTNbL6g" elementId="group.file" toBeRendered="false"/>
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_gJq1Eb_1Ee-518_TTNbL6g" elementId="team.file" toBeRendered="false"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_gJsqQL_1Ee-518_TTNbL6g" elementId="org.eclipse.ui.workbench.file">
         <tags>Draggable</tags>
         <children xsi:type="menu:HandledToolItem" xmi:id="_mLP9AL_1Ee-2R5R5GDOtrA" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" command="_fxC56r_1Ee-518_TTNbL6g"/>
       </children>
-      <children xsi:type="menu:ToolBar" xmi:id="_gJsqQb_1Ee-518_TTNbL6g" elementId="group.edit" toBeRendered="false">
+      <children xsi:type="menu:ToolBar" xmi:id="_gJsqQb_1Ee-518_TTNbL6g" elementId="team.edit" toBeRendered="false">
         <tags>toolbarSeparator</tags>
-        <children xsi:type="menu:ToolBarSeparator" xmi:id="_gJsqQr_1Ee-518_TTNbL6g" elementId="group.edit" toBeRendered="false"/>
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_gJsqQr_1Ee-518_TTNbL6g" elementId="team.edit" toBeRendered="false"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_gJsqQ7_1Ee-518_TTNbL6g" elementId="org.eclipse.ui.workbench.edit">
         <tags>Draggable</tags>
@@ -689,21 +689,21 @@
       <children xsi:type="menu:ToolBar" xmi:id="_gPnsEL_1Ee-518_TTNbL6g" elementId="org.eclipse.wst.ws.explorer.explorer" visible="false">
         <tags>Draggable</tags>
       </children>
-      <children xsi:type="menu:ToolBar" xmi:id="_gJtRUL_1Ee-518_TTNbL6g" elementId="group.nav" toBeRendered="false">
+      <children xsi:type="menu:ToolBar" xmi:id="_gJtRUL_1Ee-518_TTNbL6g" elementId="team.nav" toBeRendered="false">
         <tags>toolbarSeparator</tags>
-        <children xsi:type="menu:ToolBarSeparator" xmi:id="_gJtRUb_1Ee-518_TTNbL6g" elementId="group.nav" toBeRendered="false"/>
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_gJtRUb_1Ee-518_TTNbL6g" elementId="team.nav" toBeRendered="false"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_gJtRUr_1Ee-518_TTNbL6g" elementId="org.eclipse.ui.workbench.navigate">
         <tags>Draggable</tags>
         <children xsi:type="menu:HandledToolItem" xmi:id="_mLWDoL_1Ee-2R5R5GDOtrA" elementId="org.eclipse.ui.window.pinEditor" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" enabled="false" type="Check" command="_fxCS8b_1Ee-518_TTNbL6g"/>
       </children>
-      <children xsi:type="menu:ToolBar" xmi:id="_gJtRU7_1Ee-518_TTNbL6g" elementId="group.editor" toBeRendered="false">
+      <children xsi:type="menu:ToolBar" xmi:id="_gJtRU7_1Ee-518_TTNbL6g" elementId="team.editor" toBeRendered="false">
         <tags>toolbarSeparator</tags>
-        <children xsi:type="menu:ToolBarSeparator" xmi:id="_gJtRVL_1Ee-518_TTNbL6g" elementId="group.editor" toBeRendered="false"/>
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_gJtRVL_1Ee-518_TTNbL6g" elementId="team.editor" toBeRendered="false"/>
       </children>
-      <children xsi:type="menu:ToolBar" xmi:id="_gJtRVb_1Ee-518_TTNbL6g" elementId="group.help" toBeRendered="false">
+      <children xsi:type="menu:ToolBar" xmi:id="_gJtRVb_1Ee-518_TTNbL6g" elementId="team.help" toBeRendered="false">
         <tags>toolbarSeparator</tags>
-        <children xsi:type="menu:ToolBarSeparator" xmi:id="_gJtRVr_1Ee-518_TTNbL6g" elementId="group.help" toBeRendered="false"/>
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_gJtRVr_1Ee-518_TTNbL6g" elementId="team.help" toBeRendered="false"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_gJt4YL_1Ee-518_TTNbL6g" elementId="org.eclipse.ui.workbench.help" visible="false">
         <tags>Draggable</tags>
@@ -2600,7 +2600,7 @@
   <commands xmi:id="_fxBrn7_1Ee-518_TTNbL6g" elementId="org.eclipse.egit.ui.team.Push" commandName="Push..." category="_fw36mL_1Ee-518_TTNbL6g"/>
   <commands xmi:id="_fxBroL_1Ee-518_TTNbL6g" elementId="org.eclipse.jdt.debug.ui.commands.AddClassPrepareBreakpoint" commandName="Add Class Load Breakpoint" description="Add a class load breakpoint" category="_fw2sgL_1Ee-518_TTNbL6g"/>
   <commands xmi:id="_fxBrob_1Ee-518_TTNbL6g" elementId="org.eclipse.jpt.jpa.ui.convertJavaProjectToJpa" commandName="Convert to JPA Project..." category="_fw2se7_1Ee-518_TTNbL6g"/>
-  <commands xmi:id="_fxBror_1Ee-518_TTNbL6g" elementId="org.eclipse.egit.ui.RepositoriesCreateGroup" commandName="Create a Repository Group" description="Create a repository group for structuring repositories in the Git Repositories view" category="_fw36mL_1Ee-518_TTNbL6g"/>
+  <commands xmi:id="_fxBror_1Ee-518_TTNbL6g" elementId="org.eclipse.egit.ui.RepositoriesCreateGroup" commandName="Create a Repository Group" description="Create a repository team for structuring repositories in the Git Repositories view" category="_fw36mL_1Ee-518_TTNbL6g"/>
   <commands xmi:id="_fxBro7_1Ee-518_TTNbL6g" elementId="org.eclipse.emf.codegen.ecore.ui.Generate" commandName="Generate Code" description="Generate code for the EMF models in the workspace" category="_fw36k7_1Ee-518_TTNbL6g"/>
   <commands xmi:id="_fxBrpL_1Ee-518_TTNbL6g" elementId="org.eclipse.wst.jsdt.ui.generate.javadoc" commandName="Generate JSDoc" description="Generates JSDoc for a selectable set of JavaScript resources" category="_fw36lb_1Ee-518_TTNbL6g"/>
   <commands xmi:id="_fxBrpb_1Ee-518_TTNbL6g" elementId="org.eclipse.egit.ui.team.stash.drop" commandName="Delete Stashed Commit..." category="_fw36mL_1Ee-518_TTNbL6g"/>

@@ -34,8 +34,8 @@ public class ProjectContextFacade {
      * @param projectLeader The leader of the projectId
      * @return The taskId of the Task if it is created successfully
      */
-    public Long createProject(String projectName, String projectDescription, String projectLeader) {
-        var createProjectCommand = new CreateProjectCommand(projectName, projectDescription, projectLeader);
+    public Long createProject(Long groupId, String projectName, String projectDescription, String projectLeader) {
+        var createProjectCommand = new CreateProjectCommand(groupId, projectName, projectDescription, projectLeader);
         var result = projectCommandService.handle(createProjectCommand);
         if (result.isEmpty()) return 0L;
         return result.get().getId();

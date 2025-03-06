@@ -1,6 +1,7 @@
 package com.taskmanager.backend.project.application.internal.commandService;
 
 import com.taskmanager.backend.calendar.interfaces.acl.EventUserContextFacade;
+import com.taskmanager.backend.group.interfaces.acl.GroupContextFacade;
 import com.taskmanager.backend.project.domain.model.aggregates.Project;
 import com.taskmanager.backend.project.domain.model.commands.projectCommands.CreateProjectCommand;
 import com.taskmanager.backend.project.domain.model.commands.projectCommands.DeleteProjectCommand;
@@ -22,15 +23,18 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
     private final ProjectRepository projectRepository;
     private final ProjectUserRepository projectUserRepository;
     private final EventUserContextFacade eventUserContextFacade;
+    private final GroupContextFacade groupContextFacade;
 
     public ProjectCommandServiceImpl(
             ProjectRepository projectRepository,
             ProjectUserRepository projectUserRepository,
-            EventUserContextFacade eventUserContextFacade
+            EventUserContextFacade eventUserContextFacade,
+            GroupContextFacade groupContextFacade
     ) {
         this.projectRepository = projectRepository;
         this.projectUserRepository  = projectUserRepository;
         this.eventUserContextFacade = eventUserContextFacade;
+        this.groupContextFacade = groupContextFacade;
     }
 
     private Project findProject(Long projectId){
@@ -41,7 +45,9 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
 
     @Override
     public Optional<Project> handle(CreateProjectCommand command) {
-        var project = new Project(command);
+        var group = groupContextFacade.fetchGroupById(command.groupId());
+        if(group == null) return Optional.empty();
+        var project = new Project(command, group);
         try {
             projectRepository.save(project);
         } catch (Exception e) {
