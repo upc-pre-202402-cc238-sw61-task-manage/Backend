@@ -41,7 +41,7 @@ public class ProjectController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/tasks/{projectId}")
+    @GetMapping("/{projectId}/tasks")
     public ResponseEntity<ProjectTaskResource> getProjectTasks(@PathVariable Long projectId) {
         var getProjectByIdQuery = new GetProjectByIdQuery(projectId);
         var project = projectQueryService.handle(getProjectByIdQuery);
