@@ -22,7 +22,7 @@ public class ProjectUserQueryServiceImpl implements ProjectUserQueryService {
 
     @Override
     public List<User> handle(GetAllUsersByProjectIdQuery query) {
-        return projectUserRepository.findByProjectId(query.projectId())
+        return projectUserRepository.findAllUsersByProjectId(query.projectId())
                 .stream()
                 .map(ProjectUser::getUser)
                 .collect(Collectors.toList());
@@ -30,7 +30,7 @@ public class ProjectUserQueryServiceImpl implements ProjectUserQueryService {
 
     @Override
     public List<Project> handle(GetAllProjectsByUserIdQuery query){
-        return projectUserRepository.findByUserId(query.userId())
+        return projectUserRepository.findAllProjectsByUserId(query.userId())
                 .stream()
                 .map(ProjectUser::getProject)
                 .collect(Collectors.toList());

@@ -1,7 +1,9 @@
 package com.taskmanager.backend.project.application.internal.commandService;
 
+import com.taskmanager.backend.iam.domain.model.aggregates.User;
 import com.taskmanager.backend.iam.interfaces.acl.UserContextFacade;
 import com.taskmanager.backend.project.domain.model.aggregates.Project;
+import com.taskmanager.backend.project.domain.model.valueobjects.ProjectUserId;
 import com.taskmanager.backend.project.infrastructure.persistence.jpa.repositories.ProjectRepository;
 import com.taskmanager.backend.project.domain.model.entities.ProjectUser;
 import com.taskmanager.backend.project.domain.model.commands.projectUserCommands.CreateProjectUserCommand;
@@ -10,9 +12,6 @@ import com.taskmanager.backend.project.domain.model.commands.projectUserCommands
 import com.taskmanager.backend.project.domain.services.commandservices.ProjectUserCommandService;
 import com.taskmanager.backend.project.infrastructure.persistence.jpa.repositories.ProjectUserRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProjectUserCommandServiceImpl implements ProjectUserCommandService {
@@ -37,38 +36,38 @@ public class ProjectUserCommandServiceImpl implements ProjectUserCommandService 
         return project.get();
     }
 
-    private Long findUserId(Long userId){
+    private User findUser(Long userId){
         var user = userContext.fetchUserById(userId);
         if(user == null) throw new RuntimeException("User not found");
-        return user.getId();
+        return user;
     }
 
     @Override
     public void handle(CreateProjectUserCommand command) {
         var project = findProject(command.projectId());
-        Long projectId = project.getId();
-        Long userId = findUserId(command.userId());
+        var user = findUser(command.userId());
 
-        Optional<ProjectUser> existingProjectUser = projectUserRepository.findByProjectIdAndUserId(projectId,userId);
-
-        if (existingProjectUser.isPresent()) throw new RuntimeException("The user is already in the project");
+        ProjectUserId projectUserId = new ProjectUserId(project.getId(), user.getId());
+        if(projectUserRepository.existsById(projectUserId)) throw new RuntimeException("The user is already in the project");
 
         ProjectUser projectUser = new ProjectUser();
+        projectUser.setId(projectUserId);
         projectUser.setProject(project);
-        projectUser.setUser(userContext.fetchUserById(userId));
+        projectUser.setUser(user);
 
         projectUserRepository.save(projectUser);
     }
 
     @Override
     public void handle(DeleteProjectUserCommand command) {
-        var project = findProject(command.projectId());
-        Long projectId = project.getId();
-        Long userId = findUserId(command.userId());
+        var projectId = findProject(command.projectId()).getId();
+        var userId = findUser(command.userId()).getId();
+
+        ProjectUserId projectUserId = new ProjectUserId(projectId, userId);
 
         ProjectUser projectUser = projectUserRepository
-                .findByProjectIdAndUserId(projectId, userId)
-                .orElseThrow(() -> new RuntimeException("ProjectUser relation not found"));
+                .findById(projectUserId)
+                .orElseThrow(() -> new RuntimeException("The user is not in the project"));
 
         projectUserRepository.delete(projectUser);
     }
@@ -76,11 +75,7 @@ public class ProjectUserCommandServiceImpl implements ProjectUserCommandService 
     @Override
     public void handle(DeleteAllUsersFromProjectCommand command) {
         var projectId = findProject(command.projectId()).getId();
-
-        List<ProjectUser> projectUsers = projectUserRepository.findByProjectId(projectId);
-        if (projectUsers.isEmpty()) throw new RuntimeException("No users found in the project");
-
-        projectUserRepository.deleteAll(projectUsers);
+        projectUserRepository.removeAllUsersFromProjectByProjectId(projectId);
     }
 }
 

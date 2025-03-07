@@ -73,7 +73,7 @@ public class EventUserCommandServiceImpl implements EventUserCommandService {
     @Override
     public void handle(DeleteAllUsersFromEventCommand command) {
         var eventId = findEventId(command.eventId());
-        eventUserRepository.deleteByEventId(eventId);
+        eventUserRepository.removeAllUsersFromEventByEventId(eventId);
     }
 
 }
