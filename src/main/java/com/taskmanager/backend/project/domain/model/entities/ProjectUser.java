@@ -21,10 +21,12 @@ public class ProjectUser extends AuditableAbstractAggregateRoot<ProjectUser> {
     private ProjectUserId id;
 
     @ManyToOne
+    @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @MapsId("projectId")
     @JoinColumn(name = "project_id")
     private Project project;
 }
