@@ -6,7 +6,6 @@ import com.taskmanager.backend.team.domain.model.commands.DeleteTeamCommand;
 import com.taskmanager.backend.team.domain.model.commands.UpdateTeamCommand;
 import com.taskmanager.backend.team.domain.services.TeamCommandService;
 import com.taskmanager.backend.team.infrastructure.persistence.jpa.repositories.TeamRepository;
-import com.taskmanager.backend.team.infrastructure.persistence.jpa.repositories.TeamUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,14 +18,9 @@ import java.util.Optional;
 @Service
 public class TeamCommandServiceImpl implements TeamCommandService {
     private final TeamRepository teamRepository;
-    private final TeamUserRepository teamUserRepository;
 
-    public TeamCommandServiceImpl(
-            TeamRepository teamRepository,
-            TeamUserRepository teamUserRepository
-    ){
+    public TeamCommandServiceImpl(TeamRepository teamRepository){
         this.teamRepository = teamRepository;
-        this.teamUserRepository = teamUserRepository;
     }
 
     private Team findTeam(Long teamId){
@@ -61,7 +55,6 @@ public class TeamCommandServiceImpl implements TeamCommandService {
     public void handle(DeleteTeamCommand command) {
         var team = findTeam(command.teamId());
         try {
-            teamUserRepository.deleteAllUsersFromTeamById(team.getId());
             teamRepository.deleteById(team.getId());
         } catch (Exception e){
             throw new IllegalArgumentException("Error while deleting the Team");
