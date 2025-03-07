@@ -56,6 +56,7 @@ public class TeamUserController {
     public ResponseEntity<List<UserResource>> getAllUsersFromTeam(@PathVariable Long teamId){
         var getAllUsersByTeamIdQuery = new GetAllUsersByTeamIdQuery(teamId);
         var users = teamUserQueryService.handle(getAllUsersByTeamIdQuery);
+        if(users.isEmpty()) return ResponseEntity.badRequest().build();
         var userResource = users
                 .stream()
                 .map(UserResourceFromEntityAssembler::toResourceFromEntity)
@@ -67,6 +68,7 @@ public class TeamUserController {
     public ResponseEntity<List<TeamResource>> getAllTeamsFromUser(@PathVariable Long userId){
         var getAllTeamsByUserIdQuery = new GetAllTeamsByUserIdQuery(userId);
         var teams = teamUserQueryService.handle(getAllTeamsByUserIdQuery);
+        if(teams.isEmpty()) return ResponseEntity.notFound().build();
         var teamResource = teams
                 .stream()
                 .map(TeamResourceFromEntityAssembler::toResourceFromEntity)
