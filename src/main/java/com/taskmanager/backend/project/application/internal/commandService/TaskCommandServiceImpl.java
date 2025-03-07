@@ -1,5 +1,6 @@
 package com.taskmanager.backend.project.application.internal.commandService;
 
+import com.taskmanager.backend.iam.interfaces.acl.UserContextFacade;
 import com.taskmanager.backend.project.domain.model.aggregates.Project;
 import com.taskmanager.backend.project.domain.model.commands.taskCommands.PatchTaskStatusCommand;
 import com.taskmanager.backend.project.domain.model.entities.TaskStatus;
@@ -21,11 +22,18 @@ public class TaskCommandServiceImpl implements TaskCommandService {
     private final TaskRepository taskRepository;
     private final ProjectRepository projectRepository;
     private final TaskStatusRepository taskStatusRepository;
+    private final UserContextFacade userContextFacade;
 
-    public TaskCommandServiceImpl(TaskRepository taskRepository, ProjectRepository projectRepository, TaskStatusRepository taskStatusRepository) {
+    public TaskCommandServiceImpl(
+            TaskRepository taskRepository,
+            ProjectRepository projectRepository,
+            TaskStatusRepository taskStatusRepository,
+            UserContextFacade userContextFacade
+    ) {
         this.taskRepository = taskRepository;
         this.taskStatusRepository = taskStatusRepository;
         this.projectRepository = projectRepository;
+        this.userContextFacade = userContextFacade;
     }
 
     private Project findProject(Long projectId){
@@ -56,6 +64,7 @@ public class TaskCommandServiceImpl implements TaskCommandService {
     @Override
     public Optional<Task> handle(CreateTaskCommand command){
         var project = findProject(command.projectId());
+        if(userContextFacade.fetchUserById(command.userId()) == null) throw new RuntimeException("User not found");
         var taskTitle = command.title();
         var status = taskStatusRepository
                 .findByName(TaskStatusList.NEW)
