@@ -1,5 +1,7 @@
 package com.taskmanager.backend.team.interfaces.rest.controllers;
 
+import com.taskmanager.backend.project.interfaces.rest.resources.projectResources.ProjectLightResource;
+import com.taskmanager.backend.project.interfaces.rest.transform.projectTransform.ProjectLightResourceFromEntityAssembler;
 import com.taskmanager.backend.team.domain.model.commands.DeleteTeamCommand;
 import com.taskmanager.backend.team.domain.model.queries.GetAllTeamsQuery;
 import com.taskmanager.backend.team.domain.model.queries.GetTeamByIdQuery;
@@ -56,6 +58,19 @@ public class TeamController {
         if(team.isEmpty()) return ResponseEntity.notFound().build();
         var teamResource = TeamResourceFromEntityAssembler.toResourceFromEntity(team.get());
         return ResponseEntity.ok(teamResource);
+    }
+
+    @GetMapping("/{teamId}/projects")
+    public ResponseEntity<List<ProjectLightResource>> getAllProjectsFromTeamByTeamId(@PathVariable Long teamId){
+        var getTeamByIdQuery = new GetTeamByIdQuery(teamId);
+        var team = teamQueryService.handle(getTeamByIdQuery);
+        if(team.isEmpty()) return ResponseEntity.notFound().build();
+        var projectList = team.get().getProjectList();
+        var projectLightResourceList = projectList
+                .stream()
+                .map(ProjectLightResourceFromEntityAssembler::toResourceFromEntity)
+                .toList();
+        return ResponseEntity.ok(projectLightResourceList);
     }
 
     @PostMapping
