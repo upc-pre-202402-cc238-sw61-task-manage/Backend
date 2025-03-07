@@ -2,6 +2,8 @@ package com.taskmanager.backend.project.interfaces.rest.controllers;
 
 import com.taskmanager.backend.iam.interfaces.rest.resources.UserResource;
 import com.taskmanager.backend.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
+import com.taskmanager.backend.project.domain.model.commands.projectUserCommands.CreateProjectUserCommand;
+import com.taskmanager.backend.project.domain.model.commands.projectUserCommands.DeleteProjectUserCommand;
 import com.taskmanager.backend.project.domain.model.queries.projectUserQueries.GetAllProjectsByUserIdQuery;
 import com.taskmanager.backend.project.domain.model.queries.projectUserQueries.GetAllUsersByProjectIdQuery;
 import com.taskmanager.backend.project.interfaces.rest.resources.projectResources.ProjectResource;
@@ -9,17 +11,23 @@ import com.taskmanager.backend.project.interfaces.rest.transform.projectTransfor
 import com.taskmanager.backend.project.domain.model.commands.projectUserCommands.DeleteAllUsersFromProjectCommand;
 import com.taskmanager.backend.project.domain.services.commandservices.ProjectUserCommandService;
 import com.taskmanager.backend.project.domain.services.queryservices.ProjectUserQueryService;
-import com.taskmanager.backend.project.interfaces.rest.resources.projectUserResources.CreateProjectUserResource;
-import com.taskmanager.backend.project.interfaces.rest.resources.projectUserResources.DeleteProjectUserResource;
-import com.taskmanager.backend.project.interfaces.rest.transform.projectUserTransform.CreateProjectUserResourceCommandFromResourceAssembler;
-import com.taskmanager.backend.project.interfaces.rest.transform.projectUserTransform.DeleteProjectUserResourceCommandFromResourceAssembler;
 import com.taskmanager.backend.shared.constants.AppConstants;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/**
+ * This class is a REST controller that exposes the project user resource.
+ * It includes the following operations:
+ * <ul>
+ *     <li> POST   /api/v1/project-users/{projectId}/{userId} : Adds a user to the project </li>
+ *     <li> DELETE /api/v1/project-users/{projectId}/{userId} : Removes a user from the project </li>
+ *     <li> DELETE /api/v1/project-users/{projectId}/users    : Removes all users from the project </li>
+ *     <li> GET    /api/v1/project-users/{projectId}/users    : Returns all the users from the project </li>
+ *     <li> GET    /api/v1/project-users/{userId}/projects    : Returns all the projects from the user </li>
+ * </ul>
+ **/
 @RestController
 @RequestMapping(value = AppConstants.API_BASE_PATH + "/project-users")
 @Tag(name="Project Users", description = "Project User Endpoints")
@@ -32,9 +40,16 @@ public class ProjectUserController {
         this.projectUserQueryService = projectUserQueryService;
     }
 
-    @PostMapping
-    public ResponseEntity<String> addUserToProject(@RequestBody CreateProjectUserResource resource) {
-        var createProjectUserResourceCommand = CreateProjectUserResourceCommandFromResourceAssembler.toCommandFromResource(resource);
+    /**
+     * <h3>Add User to Project</h3>
+     * <p>Adds an existing user to an existing project</p>
+     * @param projectId The id of an existing project
+     * @param userId The id of an existing user
+     * @return A confirmation message
+     */
+    @PostMapping("/{projectId}/{userId}")
+    public ResponseEntity<String> addUserToProject(@PathVariable Long projectId, @PathVariable Long userId) {
+        var createProjectUserResourceCommand = new CreateProjectUserCommand(projectId, userId);
         try {
             projectUserCommandService.handle(createProjectUserResourceCommand);
             return ResponseEntity.ok("User added to project");
@@ -43,9 +58,16 @@ public class ProjectUserController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<String> deleteUserFromProject(@RequestBody DeleteProjectUserResource resource) {
-        var deleteProjectUserResourceCommand = DeleteProjectUserResourceCommandFromResourceAssembler.toCommandFromResource(resource);
+    /**
+     * <h3>Delete User From Project</h3>
+     * <p>Removes a user from a project</p>
+     * @param projectId The id of an existing project
+     * @param userId The id of an existing user
+     * @return A confirmation message
+     */
+    @DeleteMapping("/{projectId}/{userId}")
+    public ResponseEntity<String> deleteUserFromProject(@PathVariable Long projectId, @PathVariable Long userId) {
+        var deleteProjectUserResourceCommand = new DeleteProjectUserCommand(projectId, userId);
         try {
             projectUserCommandService.handle(deleteProjectUserResourceCommand);
             return ResponseEntity.ok("User deleted from project");
@@ -54,7 +76,13 @@ public class ProjectUserController {
         }
     }
 
-    @DeleteMapping("/project/{projectId}/users")
+    /**
+     * <h3>Delete all users from project</h3>
+     * <p>Removes all the users from a project</p>
+     * @param projectId The id of the project the users will be removed from
+     * @return A confirmation message
+     */
+    @DeleteMapping("/{projectId}/users")
     public ResponseEntity<String> deleteAllUsersFromProject(@PathVariable Long projectId) {
         try {
             var deleteAllUsersFromProjectCommand = new DeleteAllUsersFromProjectCommand(projectId);
@@ -65,8 +93,15 @@ public class ProjectUserController {
         }
     }
 
-    @GetMapping("/project/{projectId}/users")
-    public ResponseEntity<List<UserResource>> getUsersByProject(@PathVariable Long projectId) {
+    /**
+     * <h3>Get all users from project</h3>
+     * <p>Retrieves all the users from an existing projects</p>
+     * @param projectId The id of the project the users will be retrieved from
+     * @return List of users
+     * @see UserResource
+     */
+    @GetMapping("/{projectId}/users")
+    public ResponseEntity<List<UserResource>> getAllUsersFromProject(@PathVariable Long projectId) {
         var getAllUsersByProjectIdQuery = new GetAllUsersByProjectIdQuery(projectId);
         var users = projectUserQueryService.handle(getAllUsersByProjectIdQuery);
         var userResource = users
@@ -76,8 +111,14 @@ public class ProjectUserController {
         return ResponseEntity.ok(userResource);
     }
 
-    @GetMapping("/user/{userId}/projects")
-    public ResponseEntity<List<ProjectResource>> getProjectsByUser(@PathVariable Long userId) {
+    /**
+     * <h3>Get all projects from user</h3>
+     * @param userId The id of the user the projects will be retrieved from
+     * @return List of projects
+     * @see ProjectResource
+     */
+    @GetMapping("/{userId}/projects")
+    public ResponseEntity<List<ProjectResource>> getAllProjectsFromUser(@PathVariable Long userId) {
         var getAllProjectsByUserIdQuery = new GetAllProjectsByUserIdQuery(userId);
         var projects = projectUserQueryService.handle(getAllProjectsByUserIdQuery);
         var projectResource = projects
