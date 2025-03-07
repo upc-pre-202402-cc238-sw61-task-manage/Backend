@@ -33,7 +33,7 @@ public class EventUserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addEventUser(@RequestBody CreateEventUserResource resource){
+    public ResponseEntity<String> addEventUser(@RequestBody CreateEventUserResource resource){
         var createEventUserResourceCommand = CreateEventUserResourceCommandFromResourceAssembler.toCommandFromResource(resource);
         var eventUser = eventUserCommandService.handle(createEventUserResourceCommand);
         if(eventUser.isEmpty()) return ResponseEntity.badRequest().build();
@@ -41,22 +41,22 @@ public class EventUserController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> removeEventUser(@RequestBody DeleteEventUserResource resource){
+    public ResponseEntity<String> removeEventUser(@RequestBody DeleteEventUserResource resource){
         var deleteEventUserResourceCommand = DeleteEventUserResourceCommandFromResourceAssembler.toCommandFromResource(resource);
         try {
             eventUserCommandService.handle(deleteEventUserResourceCommand);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("User removed from event");
         } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
     }
 
     @DeleteMapping("event/{eventId}/users")
-    public ResponseEntity<Void> deleteAllUsersFromEvent(@PathVariable Long eventId){
+    public ResponseEntity<String> deleteAllUsersFromEvent(@PathVariable Long eventId){
         try {
             var deleteAllUsersFromEventCommand = new DeleteAllUsersFromEventCommand(eventId);
             eventUserCommandService.handle(deleteAllUsersFromEventCommand);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("All users removed from event");
         } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
