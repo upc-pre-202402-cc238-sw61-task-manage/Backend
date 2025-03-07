@@ -33,33 +33,33 @@ public class ProjectUserController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> addUserToProject(@RequestBody CreateProjectUserResource resource) {
+    public ResponseEntity<String> addUserToProject(@RequestBody CreateProjectUserResource resource) {
         var createProjectUserResourceCommand = CreateProjectUserResourceCommandFromResourceAssembler.toCommandFromResource(resource);
         try {
             projectUserCommandService.handle(createProjectUserResourceCommand);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("User added to project");
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteUserFromProject(@RequestBody DeleteProjectUserResource resource) {
+    public ResponseEntity<String> deleteUserFromProject(@RequestBody DeleteProjectUserResource resource) {
         var deleteProjectUserResourceCommand = DeleteProjectUserResourceCommandFromResourceAssembler.toCommandFromResource(resource);
         try {
             projectUserCommandService.handle(deleteProjectUserResourceCommand);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("User deleted from project");
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @DeleteMapping("/project/{projectId}/users")
-    public ResponseEntity<Void> deleteAllUsersFromProject(@PathVariable Long projectId) {
+    public ResponseEntity<String> deleteAllUsersFromProject(@PathVariable Long projectId) {
         try {
             var deleteAllUsersFromProjectCommand = new DeleteAllUsersFromProjectCommand(projectId);
             projectUserCommandService.handle(deleteAllUsersFromProjectCommand);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("All users deleted from project");
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
