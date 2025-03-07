@@ -68,12 +68,8 @@ public class ProjectUserController {
     @DeleteMapping("/{projectId}/{userId}")
     public ResponseEntity<String> deleteUserFromProject(@PathVariable Long projectId, @PathVariable Long userId) {
         var deleteProjectUserResourceCommand = new DeleteProjectUserCommand(projectId, userId);
-        try {
-            projectUserCommandService.handle(deleteProjectUserResourceCommand);
-            return ResponseEntity.ok("User deleted from project");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        projectUserCommandService.handle(deleteProjectUserResourceCommand);
+        return ResponseEntity.ok("User deleted from project");
     }
 
     /**
@@ -84,13 +80,9 @@ public class ProjectUserController {
      */
     @DeleteMapping("/{projectId}/users")
     public ResponseEntity<String> deleteAllUsersFromProject(@PathVariable Long projectId) {
-        try {
-            var deleteAllUsersFromProjectCommand = new DeleteAllUsersFromProjectCommand(projectId);
-            projectUserCommandService.handle(deleteAllUsersFromProjectCommand);
-            return ResponseEntity.ok("All users deleted from project");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        var deleteAllUsersFromProjectCommand = new DeleteAllUsersFromProjectCommand(projectId);
+        projectUserCommandService.handle(deleteAllUsersFromProjectCommand);
+        return ResponseEntity.ok("All users deleted from project");
     }
 
     /**
