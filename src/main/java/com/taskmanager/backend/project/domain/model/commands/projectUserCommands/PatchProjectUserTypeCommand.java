@@ -3,9 +3,9 @@ package com.taskmanager.backend.project.domain.model.commands.projectUserCommand
 import com.taskmanager.backend.project.domain.model.valueobjects.ProjectUserTypeList;
 import jakarta.validation.constraints.NotBlank;
 
-public record CreateProjectUserCommand(
+public record PatchProjectUserTypeCommand(
         @NotBlank Long projectId,
         @NotBlank Long userId,
-        @NotBlank ProjectUserTypeList typeList
+        @NotBlank ProjectUserTypeList type
 ) {
 }

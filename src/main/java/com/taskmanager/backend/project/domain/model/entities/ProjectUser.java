@@ -29,4 +29,13 @@ public class ProjectUser extends AuditableAbstractAggregateRoot<ProjectUser> {
     @MapsId("projectId")
     @JoinColumn(name = "project_id")
     private Project project;
+
+    @ManyToOne
+    @JoinColumn(name = "type_id", nullable = false)
+    private ProjectUserType projectUserType;
+
+    public ProjectUser patchType(ProjectUserType projectUserType) {
+        this.projectUserType = projectUserType;
+        return this;
+    }
 }

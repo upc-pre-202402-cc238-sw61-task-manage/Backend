@@ -4,8 +4,10 @@ import com.taskmanager.backend.iam.interfaces.rest.resources.UserResource;
 import com.taskmanager.backend.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
 import com.taskmanager.backend.project.domain.model.commands.projectUserCommands.CreateProjectUserCommand;
 import com.taskmanager.backend.project.domain.model.commands.projectUserCommands.DeleteProjectUserCommand;
+import com.taskmanager.backend.project.domain.model.commands.projectUserCommands.PatchProjectUserTypeCommand;
 import com.taskmanager.backend.project.domain.model.queries.projectUserQueries.GetAllProjectsByUserIdQuery;
 import com.taskmanager.backend.project.domain.model.queries.projectUserQueries.GetAllUsersByProjectIdQuery;
+import com.taskmanager.backend.project.domain.model.valueobjects.ProjectUserTypeList;
 import com.taskmanager.backend.project.interfaces.rest.resources.projectResources.ProjectResource;
 import com.taskmanager.backend.project.interfaces.rest.transform.projectTransform.ProjectResourceFromEntityAssembler;
 import com.taskmanager.backend.project.domain.model.commands.projectUserCommands.DeleteAllUsersFromProjectCommand;
@@ -47,15 +49,18 @@ public class ProjectUserController {
      * @param userId The id of an existing user
      * @return A confirmation message
      */
-    @PostMapping("/{projectId}/{userId}")
-    public ResponseEntity<String> addUserToProject(@PathVariable Long projectId, @PathVariable Long userId) {
-        var createProjectUserResourceCommand = new CreateProjectUserCommand(projectId, userId);
-        try {
-            projectUserCommandService.handle(createProjectUserResourceCommand);
-            return ResponseEntity.ok("User added to project");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+    @PostMapping("/{projectId}/{userId}/{type}")
+    public ResponseEntity<String> addUserToProject(@PathVariable Long projectId, @PathVariable Long userId, @PathVariable ProjectUserTypeList type) {
+        var createProjectUserResourceCommand = new CreateProjectUserCommand(projectId, userId, type);
+        projectUserCommandService.handle(createProjectUserResourceCommand);
+        return ResponseEntity.ok("User with type "  + type + " added to project");
+    }
+
+    @PatchMapping("/{projectId}/{userId}/{type}")
+    public ResponseEntity<String> patchProjectUserType(@PathVariable Long projectId, @PathVariable Long userId, @PathVariable ProjectUserTypeList type){
+        var patchProjectUserTypeCommand = new PatchProjectUserTypeCommand(projectId,userId,type);
+        projectUserCommandService.handle(patchProjectUserTypeCommand);
+        return ResponseEntity.ok("Changed the user type to " + type);
     }
 
     /**
