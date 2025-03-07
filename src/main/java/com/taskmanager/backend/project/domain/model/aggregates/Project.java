@@ -1,6 +1,7 @@
 package com.taskmanager.backend.project.domain.model.aggregates;
 
 import com.taskmanager.backend.calendar.domain.model.aggregates.Event;
+import com.taskmanager.backend.project.domain.model.entities.ProjectUser;
 import com.taskmanager.backend.team.domain.model.aggregates.Team;
 import com.taskmanager.backend.project.domain.model.commands.projectCommands.CreateProjectCommand;
 import com.taskmanager.backend.project.domain.model.commands.projectCommands.UpdateProjectCommand;
@@ -39,6 +40,9 @@ public class Project extends AuditableAbstractAggregateRoot<Project> {
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> eventList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProjectUser> projectUsers = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "team_id", nullable = false)

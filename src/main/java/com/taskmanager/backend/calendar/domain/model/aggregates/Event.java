@@ -5,12 +5,16 @@ import com.taskmanager.backend.calendar.domain.model.commands.eventcommands.Crea
 import com.taskmanager.backend.calendar.domain.model.commands.eventcommands.PatchEventDateCommand;
 import com.taskmanager.backend.calendar.domain.model.commands.eventcommands.UpdateEventCommand;
 import com.taskmanager.backend.calendar.domain.model.entities.EventColor;
+import com.taskmanager.backend.calendar.domain.model.entities.EventUser;
 import com.taskmanager.backend.project.domain.model.aggregates.Project;
 import com.taskmanager.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import com.taskmanager.backend.shared.domain.model.valueobjects.DateRange;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -38,6 +42,9 @@ public class Event extends AuditableAbstractAggregateRoot<Event> {
     @ManyToOne
     @JoinColumn(name = "color_id", nullable = false)
     private EventColor color;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EventUser> eventUsers = new ArrayList<>();
 
     public Event(CreateEventCommand command, Project project, EventColor color) {
         this.project = project;
