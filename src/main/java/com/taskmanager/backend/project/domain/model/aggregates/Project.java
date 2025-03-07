@@ -1,7 +1,7 @@
 package com.taskmanager.backend.project.domain.model.aggregates;
 
 import com.taskmanager.backend.calendar.domain.model.aggregates.Event;
-import com.taskmanager.backend.group.domain.model.aggregates.Team;
+import com.taskmanager.backend.team.domain.model.aggregates.Team;
 import com.taskmanager.backend.project.domain.model.commands.projectCommands.CreateProjectCommand;
 import com.taskmanager.backend.project.domain.model.commands.projectCommands.UpdateProjectCommand;
 import com.taskmanager.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
@@ -41,7 +41,7 @@ public class Project extends AuditableAbstractAggregateRoot<Project> {
     private List<Event> eventList = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "group_id", nullable = false)
+    @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
 

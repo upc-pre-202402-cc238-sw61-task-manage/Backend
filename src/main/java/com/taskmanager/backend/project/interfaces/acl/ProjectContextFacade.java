@@ -29,13 +29,14 @@ public class ProjectContextFacade {
 
     /**
      * Creates a task with the given title, description and due date
+     * @param teamId The id of the team the project is related to
      * @param projectName The title of the Project
      * @param projectDescription The complete description of the Project.
      * @param projectLeader The leader of the projectId
      * @return The taskId of the Task if it is created successfully
      */
-    public Long createProject(Long groupId, String projectName, String projectDescription, String projectLeader) {
-        var createProjectCommand = new CreateProjectCommand(groupId, projectName, projectDescription, projectLeader);
+    public Long createProject(Long teamId, String projectName, String projectDescription, String projectLeader) {
+        var createProjectCommand = new CreateProjectCommand(teamId, projectName, projectDescription, projectLeader);
         var result = projectCommandService.handle(createProjectCommand);
         if (result.isEmpty()) return 0L;
         return result.get().getId();
