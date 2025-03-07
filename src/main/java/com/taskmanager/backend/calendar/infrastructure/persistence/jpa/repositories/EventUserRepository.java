@@ -23,5 +23,5 @@ public interface EventUserRepository extends JpaRepository<EventUser, EventUserI
     @Transactional
     @Modifying
     @Query("DELETE FROM EventUser eu WHERE eu.id.eventId = :eventId")
-    void deleteByEventId(@Param("eventId") Long eventId);
+    void removeAllUsersFromEventByEventId(@Param("eventId") Long eventId);
 }

@@ -35,31 +35,22 @@ public class EventUserController {
     @PostMapping
     public ResponseEntity<String> addEventUser(@RequestBody CreateEventUserResource resource){
         var createEventUserResourceCommand = CreateEventUserResourceCommandFromResourceAssembler.toCommandFromResource(resource);
-        var eventUser = eventUserCommandService.handle(createEventUserResourceCommand);
-        if(eventUser.isEmpty()) return ResponseEntity.badRequest().build();
-        return ResponseEntity.ok().build();
+        eventUserCommandService.handle(createEventUserResourceCommand);
+        return ResponseEntity.ok("User added to the event");
     }
 
     @DeleteMapping
     public ResponseEntity<String> removeEventUser(@RequestBody DeleteEventUserResource resource){
         var deleteEventUserResourceCommand = DeleteEventUserResourceCommandFromResourceAssembler.toCommandFromResource(resource);
-        try {
-            eventUserCommandService.handle(deleteEventUserResourceCommand);
-            return ResponseEntity.ok("User removed from event");
-        } catch (Exception e){
-            return ResponseEntity.badRequest().build();
-        }
+        eventUserCommandService.handle(deleteEventUserResourceCommand);
+        return ResponseEntity.ok("User removed from event");
     }
 
     @DeleteMapping("event/{eventId}/users")
     public ResponseEntity<String> deleteAllUsersFromEvent(@PathVariable Long eventId){
-        try {
-            var deleteAllUsersFromEventCommand = new DeleteAllUsersFromEventCommand(eventId);
-            eventUserCommandService.handle(deleteAllUsersFromEventCommand);
-            return ResponseEntity.ok("All users removed from event");
-        } catch (Exception e){
-            return ResponseEntity.badRequest().build();
-        }
+        var deleteAllUsersFromEventCommand = new DeleteAllUsersFromEventCommand(eventId);
+        eventUserCommandService.handle(deleteAllUsersFromEventCommand);
+        return ResponseEntity.ok("All users removed from event");
     }
 
     @GetMapping("event/{eventId}/users")
