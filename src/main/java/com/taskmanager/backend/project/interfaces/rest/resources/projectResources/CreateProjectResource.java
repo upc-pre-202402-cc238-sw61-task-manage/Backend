@@ -3,7 +3,6 @@ package com.taskmanager.backend.project.interfaces.rest.resources.projectResourc
 public record CreateProjectResource(
         Long teamId,
         String title,
-        String description,
-        String leader
+        String description
 ) {
 }

@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 public record CreateProjectCommand(
         @NotBlank Long teamId,
         @NotBlank String title,
-        @NotBlank String description,
-        @NotBlank String leader
+        @NotBlank String description
 ) {
 }

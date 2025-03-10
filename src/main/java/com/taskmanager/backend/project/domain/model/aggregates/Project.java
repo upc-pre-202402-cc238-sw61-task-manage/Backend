@@ -35,9 +35,6 @@ public class Project extends AuditableAbstractAggregateRoot<Project> {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> taskList = new ArrayList<>();
 
-    @AttributeOverride(name = "value", column = @Column(name = "leader"))
-    private String leader;
-
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> eventList = new ArrayList<>();
 
@@ -52,7 +49,6 @@ public class Project extends AuditableAbstractAggregateRoot<Project> {
     public Project(CreateProjectCommand command, Team team){
         this.title = command.title();
         this.description = command.description();
-        this.leader = command.leader();
         this.team = team;
     }
 

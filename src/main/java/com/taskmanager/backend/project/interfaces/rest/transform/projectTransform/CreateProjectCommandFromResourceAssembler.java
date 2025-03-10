@@ -8,8 +8,7 @@ public class CreateProjectCommandFromResourceAssembler {
         return new CreateProjectCommand(
                 resource.teamId(),
                 resource.title(),
-                resource.description(),
-                resource.leader()
+                resource.description()
         );
     }
 }

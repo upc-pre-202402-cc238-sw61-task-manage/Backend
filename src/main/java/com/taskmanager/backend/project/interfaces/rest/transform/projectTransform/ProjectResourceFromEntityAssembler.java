@@ -8,8 +8,7 @@ public class ProjectResourceFromEntityAssembler {
         return new ProjectResource(
                 entity.getId(),
                 entity.getTitle(),
-                entity.getDescription(),
-                entity.getLeader()
+                entity.getDescription()
         );
     }
 }
