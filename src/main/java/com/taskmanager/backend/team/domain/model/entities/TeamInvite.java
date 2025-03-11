@@ -3,7 +3,6 @@ package com.taskmanager.backend.team.domain.model.entities;
 import com.taskmanager.backend.iam.domain.model.aggregates.User;
 import com.taskmanager.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import com.taskmanager.backend.team.domain.model.aggregates.Team;
-import com.taskmanager.backend.team.domain.model.valueobjects.TeamInviteStatusList;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
