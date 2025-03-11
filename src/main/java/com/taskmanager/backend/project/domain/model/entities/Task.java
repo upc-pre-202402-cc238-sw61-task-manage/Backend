@@ -1,7 +1,6 @@
 package com.taskmanager.backend.project.domain.model.entities;
 
 import com.taskmanager.backend.project.domain.model.aggregates.Project;
-import com.taskmanager.backend.project.domain.model.commands.taskCommands.PatchTaskStatusCommand;
 import com.taskmanager.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import com.taskmanager.backend.project.domain.model.commands.taskCommands.CreateTaskCommand;
 import com.taskmanager.backend.project.domain.model.commands.taskCommands.UpdateTaskCommand;

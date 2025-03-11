@@ -1,6 +1,6 @@
 package com.taskmanager.backend.team.domain.model.valueobjects;
 
-public enum TeamInviteStatus {
+public enum TeamInviteStatusList {
     PENDING,
     ACCEPTED,
     REJECTED

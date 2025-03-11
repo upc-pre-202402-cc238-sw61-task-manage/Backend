@@ -1,8 +1,9 @@
 package com.taskmanager.backend.team.domain.model.entities;
 
 import com.taskmanager.backend.iam.domain.model.aggregates.User;
+import com.taskmanager.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import com.taskmanager.backend.team.domain.model.aggregates.Team;
-import com.taskmanager.backend.team.domain.model.valueobjects.TeamInviteStatus;
+import com.taskmanager.backend.team.domain.model.valueobjects.TeamInviteStatusList;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "team_invites")
-public class TeamInvite {
+public class TeamInvite extends AuditableAbstractAggregateRoot<TeamInvite> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,22 +34,18 @@ public class TeamInvite {
     @JoinColumn(name = "inviting_user_id", nullable = false)
     private User invitingUser;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "status_id", nullable = false)
     private TeamInviteStatus status;
 
-    public TeamInvite(Team team, User invitedUser, User invitingUser) {
+    public TeamInvite(Team team, User invitedUser, User invitingUser, TeamInviteStatus status) {
         this.team = team;
         this.invitedUser = invitedUser;
         this.invitingUser = invitingUser;
-        this.status = TeamInviteStatus.PENDING;
+        this.status = status;
     }
 
-    public void accept() {
-        this.status = TeamInviteStatus.ACCEPTED;
-    }
-
-    public void reject() {
-        this.status = TeamInviteStatus.REJECTED;
+    public void updateStatus(TeamInviteStatus status) {
+        this.status = status;
     }
 }
