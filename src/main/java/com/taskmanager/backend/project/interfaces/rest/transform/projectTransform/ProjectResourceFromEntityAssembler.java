@@ -7,6 +7,7 @@ public class ProjectResourceFromEntityAssembler {
     public static ProjectResource toResourceFromEntity(Project entity){
         return new ProjectResource(
                 entity.getId(),
+                entity.getTeam().getId(),
                 entity.getTitle(),
                 entity.getDescription()
         );
