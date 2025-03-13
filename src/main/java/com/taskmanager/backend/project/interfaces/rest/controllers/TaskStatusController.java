@@ -1,7 +1,9 @@
 package com.taskmanager.backend.project.interfaces.rest.controllers;
 
-import com.taskmanager.backend.iam.interfaces.rest.resources.RoleResource;
 import com.taskmanager.backend.project.domain.model.queries.taskQueries.GetAllTaskStatusQuery;
+import com.taskmanager.backend.project.domain.model.queries.taskQueries.GetTaskStatusCountQuery;
+import com.taskmanager.backend.project.domain.model.valueobjects.TaskStatusCount;
+import com.taskmanager.backend.project.domain.services.queryservices.TaskStatusCountQueryService;
 import com.taskmanager.backend.project.domain.services.queryservices.TaskStatusQueryService;
 import com.taskmanager.backend.project.interfaces.rest.resources.taskResources.TaskStatusResource;
 import com.taskmanager.backend.project.interfaces.rest.transform.taskTransform.TaskStatusResourceFromEntityAssembler;
@@ -9,9 +11,7 @@ import com.taskmanager.backend.shared.constants.AppConstants;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,9 +24,11 @@ import java.util.List;
 @Tag(name = "Task Status", description = "Task Status Management Endpoints")
 public class TaskStatusController {
     private final TaskStatusQueryService taskStatusQueryService;
+    private final TaskStatusCountQueryService taskStatusCountQueryService;
 
-    public TaskStatusController(final TaskStatusQueryService taskStatusQueryService) {
+    public TaskStatusController(final TaskStatusQueryService taskStatusQueryService, TaskStatusCountQueryService taskStatusCountQueryService) {
         this.taskStatusQueryService = taskStatusQueryService;
+        this.taskStatusCountQueryService = taskStatusCountQueryService;
     }
 
     /**
@@ -40,5 +42,12 @@ public class TaskStatusController {
         var statusList = taskStatusQueryService.handle(getAllTaskStatusQuery);
         var statusResource = statusList.stream().map(TaskStatusResourceFromEntityAssembler::toResourceFromEntity).toList();
         return ResponseEntity.ok(statusResource);
+    }
+
+    @GetMapping("/{projectId}")
+    public ResponseEntity<List<TaskStatusCount>> getTaskStatusCountByProjectId(@PathVariable Long projectId) {
+        var getTaskStatusCountQuery = new GetTaskStatusCountQuery(projectId);
+        var taskStatusCount = taskStatusCountQueryService.handle(getTaskStatusCountQuery);
+        return ResponseEntity.ok(taskStatusCount);
     }
 }

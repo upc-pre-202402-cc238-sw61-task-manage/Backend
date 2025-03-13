@@ -1,8 +1,10 @@
 package com.taskmanager.backend.project.infrastructure.persistence.jpa.repositories;
 
 import com.taskmanager.backend.project.domain.model.entities.Task;
+import com.taskmanager.backend.project.domain.model.valueobjects.TaskStatusCount;
 import com.taskmanager.backend.project.domain.model.valueobjects.TaskStatusList;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -19,4 +21,13 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByProjectIdAndStatus(Long projectId, TaskStatusList status);
     List<Task> findByProjectIdAndUserIdAndStatus(Long projectId, Long userId, TaskStatusList status);
     List<Task> findByDueDate(LocalDateTime localDate);
+
+    @Query(
+            value = """
+                    SELECT s.name AS status, COUNT(t.id) AS amount FROM statuses s
+                    LEFT JOIN tasks t ON s.id = t.status_id AND t.project_id = :projectId
+                    GROUP BY s.name
+            """
+            ,nativeQuery = true)
+    List<Object[]> getTaskStatusCountByProjectId(Long projectId);
 }
