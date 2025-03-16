@@ -5,7 +5,10 @@ import com.taskmanager.backend.project.interfaces.rest.transform.projectTransfor
 import com.taskmanager.backend.team.domain.model.commands.DeleteTeamCommand;
 import com.taskmanager.backend.team.domain.model.queries.GetAllTeamsQuery;
 import com.taskmanager.backend.team.domain.model.queries.GetTeamByIdQuery;
+import com.taskmanager.backend.team.domain.model.queries.GetTeamProjectsByUserIdQuery;
+import com.taskmanager.backend.team.domain.model.valueobjects.TeamProject;
 import com.taskmanager.backend.team.domain.services.TeamCommandService;
+import com.taskmanager.backend.team.domain.services.TeamProjectQueryService;
 import com.taskmanager.backend.team.domain.services.TeamQueryService;
 import com.taskmanager.backend.team.interfaces.rest.resources.CreateTeamResource;
 import com.taskmanager.backend.team.interfaces.rest.resources.TeamResource;
@@ -34,10 +37,12 @@ import java.util.List;
 public class TeamController {
     private final TeamCommandService teamCommandService;
     private final TeamQueryService teamQueryService;
+    private final TeamProjectQueryService teamProjectQueryService;
 
-    public TeamController(TeamCommandService teamCommandService, TeamQueryService teamQueryService){
+    public TeamController(TeamCommandService teamCommandService, TeamQueryService teamQueryService, TeamProjectQueryService teamProjectQueryService){
         this.teamCommandService = teamCommandService;
         this.teamQueryService = teamQueryService;
+        this.teamProjectQueryService = teamProjectQueryService;
     }
 
     @GetMapping
@@ -71,6 +76,13 @@ public class TeamController {
                 .map(ProjectLightResourceFromEntityAssembler::toResourceFromEntity)
                 .toList();
         return ResponseEntity.ok(projectLightResourceList);
+    }
+
+    @GetMapping("/{userId}/team/projects")
+    public ResponseEntity<List<TeamProject>> getAllProjectsFromEachTeamByUserId(@PathVariable Long userId){
+        var getTeamProjectsByUserIdQuery = new GetTeamProjectsByUserIdQuery(userId);
+        var teamProjects = teamProjectQueryService.handle(getTeamProjectsByUserIdQuery);
+        return ResponseEntity.ok(teamProjects);
     }
 
     @PostMapping
