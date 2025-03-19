@@ -23,4 +23,14 @@ public interface ProjectUserRepository extends JpaRepository<ProjectUser, Projec
     @Modifying
     @Query("DELETE FROM ProjectUser pu WHERE pu.project.id = :projectId")
     void removeAllUsersFromProjectByProjectId(@Param("projectId") Long projectId);
+
+    @Query(value = """
+        SELECT
+	        pu.user_id AS user_id, pf.first_name AS first_name, pf.last_name AS last_name, pf.profile_picture AS profile_picture
+            FROM project_users pu
+	            JOIN users u ON u.id = pu.user_id
+	            JOIN profiles pf ON u.profile_id = pf.id
+            WHERE pu.project_id = :projectId
+    """, nativeQuery = true)
+    List<Object[]> getAllProfilesByProjectId(@Param("projectId") Long projectId);
 }

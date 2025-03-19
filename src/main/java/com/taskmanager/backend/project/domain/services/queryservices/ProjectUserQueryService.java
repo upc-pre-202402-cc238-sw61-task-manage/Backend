@@ -2,8 +2,10 @@ package com.taskmanager.backend.project.domain.services.queryservices;
 
 import com.taskmanager.backend.iam.domain.model.aggregates.User;
 import com.taskmanager.backend.project.domain.model.aggregates.Project;
+import com.taskmanager.backend.project.domain.model.queries.projectUserQueries.GetAllProfilesByProjectIdQuery;
 import com.taskmanager.backend.project.domain.model.queries.projectUserQueries.GetAllProjectsByUserIdQuery;
 import com.taskmanager.backend.project.domain.model.queries.projectUserQueries.GetAllUsersByProjectIdQuery;
+import com.taskmanager.backend.project.domain.model.valueobjects.ProjectProfile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,4 +14,5 @@ import java.util.List;
 public interface ProjectUserQueryService {
     List<User> handle(GetAllUsersByProjectIdQuery query);
     List<Project> handle(GetAllProjectsByUserIdQuery query);
+    List<ProjectProfile> handle(GetAllProfilesByProjectIdQuery query);
 }

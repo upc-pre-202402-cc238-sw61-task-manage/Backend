@@ -5,8 +5,10 @@ import com.taskmanager.backend.iam.interfaces.rest.transform.UserResourceFromEnt
 import com.taskmanager.backend.project.domain.model.commands.projectUserCommands.CreateProjectUserCommand;
 import com.taskmanager.backend.project.domain.model.commands.projectUserCommands.DeleteProjectUserCommand;
 import com.taskmanager.backend.project.domain.model.commands.projectUserCommands.PatchProjectUserTypeCommand;
+import com.taskmanager.backend.project.domain.model.queries.projectUserQueries.GetAllProfilesByProjectIdQuery;
 import com.taskmanager.backend.project.domain.model.queries.projectUserQueries.GetAllProjectsByUserIdQuery;
 import com.taskmanager.backend.project.domain.model.queries.projectUserQueries.GetAllUsersByProjectIdQuery;
+import com.taskmanager.backend.project.domain.model.valueobjects.ProjectProfile;
 import com.taskmanager.backend.project.domain.model.valueobjects.ProjectUserTypeList;
 import com.taskmanager.backend.project.interfaces.rest.resources.projectResources.ProjectResource;
 import com.taskmanager.backend.project.interfaces.rest.transform.projectTransform.ProjectResourceFromEntityAssembler;
@@ -106,6 +108,20 @@ public class ProjectUserController {
                 .map(UserResourceFromEntityAssembler::toResourceFromEntity)
                 .toList();
         return ResponseEntity.ok(userResource);
+    }
+
+    /**
+     * <h3>Get all profiles from project</h3>
+     * <p>Retrieves all the profiles of the users that belong to an existing project</p>
+     * @param projectId The id of the project
+     * @return A list of project profiles
+     * @see ProjectProfile
+     */
+    @GetMapping("/{projectId}/profiles")
+    public ResponseEntity<List<ProjectProfile>> getAllProfilesFromProject(@PathVariable Long projectId){
+        var getAllProfilesByProjectIdQuery = new GetAllProfilesByProjectIdQuery(projectId);
+        var profiles = projectUserQueryService.handle(getAllProfilesByProjectIdQuery);
+        return ResponseEntity.ok(profiles);
     }
 
     /**

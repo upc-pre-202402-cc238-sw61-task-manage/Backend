@@ -3,8 +3,10 @@ package com.taskmanager.backend.project.application.internal.queryService;
 import com.taskmanager.backend.iam.domain.model.aggregates.User;
 import com.taskmanager.backend.project.domain.model.aggregates.Project;
 import com.taskmanager.backend.project.domain.model.entities.ProjectUser;
+import com.taskmanager.backend.project.domain.model.queries.projectUserQueries.GetAllProfilesByProjectIdQuery;
 import com.taskmanager.backend.project.domain.model.queries.projectUserQueries.GetAllProjectsByUserIdQuery;
 import com.taskmanager.backend.project.domain.model.queries.projectUserQueries.GetAllUsersByProjectIdQuery;
+import com.taskmanager.backend.project.domain.model.valueobjects.ProjectProfile;
 import com.taskmanager.backend.project.domain.services.queryservices.ProjectUserQueryService;
 import com.taskmanager.backend.project.infrastructure.persistence.jpa.repositories.ProjectUserRepository;
 import org.springframework.stereotype.Service;
@@ -34,5 +36,19 @@ public class ProjectUserQueryServiceImpl implements ProjectUserQueryService {
                 .stream()
                 .map(ProjectUser::getProject)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProjectProfile> handle(GetAllProfilesByProjectIdQuery query) {
+        List<Object[]> response = projectUserRepository.getAllProfilesByProjectId(query.projectId());
+        return response
+                .stream()
+                .map(obj -> new ProjectProfile(
+                        (Long) obj[0], //user id
+                        (String) obj[1], //first name
+                        (String) obj[2], //last name
+                        (String) obj[3]) //profile picture
+                )
+                .toList();
     }
 }
