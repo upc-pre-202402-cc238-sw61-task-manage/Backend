@@ -1,9 +1,9 @@
 package com.taskmanager.backend.shared.infrastructure.persistence.jpa.configuration.strategy;
+
+import org.atteo.evo.inflector.English;
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
 import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
-
-import static io.github.encryptorcode.pluralize.Pluralize.pluralize;
 
 public class SnakeCaseWithPluralizedTablePhysicalNamingStrategy implements PhysicalNamingStrategy {
     @Override
@@ -18,7 +18,6 @@ public class SnakeCaseWithPluralizedTablePhysicalNamingStrategy implements Physi
 
     @Override
     public Identifier toPhysicalTableName(Identifier identifier, JdbcEnvironment jdbcEnvironment) {
-
         return this.toSnakeCase(this.toPlural(identifier));
     }
 
@@ -33,9 +32,7 @@ public class SnakeCaseWithPluralizedTablePhysicalNamingStrategy implements Physi
     }
 
     private Identifier toSnakeCase(final Identifier identifier) {
-        if (identifier == null) {
-            return null;
-        }
+        if (identifier == null) return null;
         final String regex = "([a-z])([A-Z])";
         final String replacement = "$1_$2";
         final String newName = identifier.getText()
@@ -45,7 +42,8 @@ public class SnakeCaseWithPluralizedTablePhysicalNamingStrategy implements Physi
     }
 
     private Identifier toPlural(final Identifier identifier) {
-        final String newName = pluralize(identifier.getText());
+        if (identifier == null) return null;
+        final String newName = English.plural(identifier.getText());
         return Identifier.toIdentifier(newName);
     }
 }

@@ -1,4 +1,4 @@
-FROM openjdk:22-jdk
+FROM openjdk:21-jdk
 VOLUME /tmp
 EXPOSE 8080
 COPY target/*.jar app.jar
